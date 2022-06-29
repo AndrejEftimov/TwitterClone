@@ -42,7 +42,7 @@ namespace Twitter.Data
             DbContextOptions<TwitterContext>>()))
             {
                 CreateUserRoles(serviceProvider).Wait();
-
+                
                 if (context.Users.Any() || context.Replies.Any() || context.Posts.Any() || context.ListMember.Any() ||
                     context.ListFollower.Any() || context.Lists.Any() || context.Hearts.Any() || context.Followings.Any())
                 {
@@ -51,6 +51,7 @@ namespace Twitter.Data
 
                 TwitterUser twitterUser;
                 User user;
+                Post post;
                 string pass;
                 IdentityResult result;
 
@@ -65,7 +66,7 @@ namespace Twitter.Data
                 };
 
                 context.Users.Add(user);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 twitterUser = new TwitterUser()
                 {
@@ -91,7 +92,7 @@ namespace Twitter.Data
                 };
 
                 context.Users.Add(user);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 twitterUser = new TwitterUser()
                 {
@@ -119,7 +120,7 @@ namespace Twitter.Data
                 };
 
                 context.Users.Add(user);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 twitterUser = new TwitterUser()
                 {
@@ -145,7 +146,7 @@ namespace Twitter.Data
                 };
 
                 context.Users.Add(user);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 twitterUser = new TwitterUser()
                 {
@@ -171,7 +172,7 @@ namespace Twitter.Data
                 };
 
                 context.Users.Add(user);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 twitterUser = new TwitterUser()
                 {
@@ -186,8 +187,189 @@ namespace Twitter.Data
                 result = await UserManager.CreateAsync(twitterUser, pass);
                 if (result.Succeeded) { await UserManager.AddToRoleAsync(twitterUser, "User"); }
 
-                // Add Post
-                // ...
+                // Add Posts
+                context.Posts.AddRange(
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "TomCruise").Id,
+                    Text = "36 years after the first film, #TopGun: Maverick is finally here. " +
+                    "We made it for the big screen. And we made it for you, the fans. I hope you enjoy the ride this weekend."
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "TomCruise").Id,
+                    Text = "This has been a long time coming. #TopGun",
+                    Image = "TomCruisePostImage1.jpg"
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "CillianMurphy").Id,
+                    Text = "What's your favourite Peaky Blinders scene?",
+                    Image = "CillianMurphyPostImage1.jpg"
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "KevinRichardson").Id,
+                    Text = "We're highlighting some pretty incredible moments over the last few years in today's video. " +
+                    "Trust us, you don't want to miss it! CLICK HERE: https://youtu.be/NIIQfQ8nv7Y",
+                    Image = "KevinRichardsonPostImage1.png"
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "KevinRichardson").Id,
+                    Text = "Displaying Loving Bond With Hyenas",
+                    Image = "KevinRichardsonPostImage2.jpg"
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "RobertDowneyJr").Id,
+                    Text = "Hitting pen to paper today and making the planet greener.",
+                    Video = "RobertDowneyJrPostVideo1.mp4"
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "RobertDowneyJr").Id,
+                    Text = "",
+                    Image = "RobertDowneyJrPostImage1.jpg"
+                },
+                new Post
+                {
+                    UserId = context.Users.FirstOrDefault(u => u.UserName == "JovaMusique").Id,
+                    Text = "Guys! Heat Waves by Glass Animals (piano visualizer cover) link to watch " +
+                    "full video: https://youtu.be/dHsQYTqKN4A hope u like the piano version! have a good day!",
+                    Image = "JovaMusiquePostImage1.jpg"
+                }
+                );
+                await context.SaveChangesAsync();
+
+                // Add Lists
+                context.Lists.Add(
+                    new List
+                    {
+                        CreatorId = context.Users.FirstOrDefault(u => u.UserName == "JovaMusique").Id,
+                        Name = "Oppenheimer 2023 Cast",
+                        Description = "Overview of the Oppenheimer 2023 Cast",
+                        CoverImage = "_DefaultListCover.png"
+                    }
+                    );
+                await context.SaveChangesAsync();
+
+                // Add List Followers and Members
+                context.ListMember.AddRange(
+                    new ListMember
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        MemberId = context.Users.FirstOrDefault(u => u.UserName == "CillianMurphy").Id
+                    },
+                    new ListMember
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        MemberId = context.Users.FirstOrDefault(u => u.UserName == "RobertDowneyJr").Id
+                    }
+                    );
+
+                context.ListFollower.AddRange(
+                    new ListFollower
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        FollowerId = context.Users.FirstOrDefault(u => u.UserName == "CillianMurphy").Id
+                    },
+                    new ListFollower
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        FollowerId = context.Users.FirstOrDefault(u => u.UserName == "RobertDowneyJr").Id
+                    }
+                    ,
+                    new ListFollower
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        FollowerId = context.Users.FirstOrDefault(u => u.UserName == "JovaMusique").Id
+                    }
+                    ,
+                    new ListFollower
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        FollowerId = context.Users.FirstOrDefault(u => u.UserName == "KevinRichardson").Id
+                    }
+                    ,
+                    new ListFollower
+                    {
+                        ListId = context.Lists.FirstOrDefault(l => l.Name == "Oppenheimer 2023 Cast").Id,
+                        FollowerId = context.Users.FirstOrDefault(u => u.UserName == "TomCruise").Id
+                    }
+                    );
+                await context.SaveChangesAsync();
+
+                // Add Followings
+                context.Followings.AddRange(
+                    new Following
+                    {
+                        FollowerId = 1,
+                        FollowedUserId = 2
+                    },
+                    new Following
+                    {
+                        FollowerId = 1,
+                        FollowedUserId = 3
+                    },
+                    new Following
+                    {
+                        FollowerId = 1,
+                        FollowedUserId = 4
+                    },
+                    new Following
+                    {
+                        FollowerId = 1,
+                        FollowedUserId = 5
+                    },
+                    new Following
+                    {
+                        FollowerId = 2,
+                        FollowedUserId = 3
+                    },
+                    new Following
+                    {
+                        FollowerId = 2,
+                        FollowedUserId = 4
+                    },
+                    new Following
+                    {
+                        FollowerId = 2,
+                        FollowedUserId = 5
+                    }
+                    );
+                await context.SaveChangesAsync();
+
+                foreach(Following following in context.Followings)
+                {
+                    context.Users.FirstOrDefault(u => u.Id == following.FollowerId).FollowingCount++;
+                    context.Users.FirstOrDefault(u => u.Id == following.FollowedUserId).FollowerCount++;
+                }
+
+                await context.SaveChangesAsync();
+
+                // Add Replies
+                context.Replies.AddRange(
+                    new Reply
+                    {
+                        PostId = 3,
+                        UserId = 1,
+                        Text = "For me it's the one where Tommy is about to be executed by the Red Right Hand"
+                    },
+                    new Reply
+                    {
+                        PostId = 3,
+                        UserId = 4,
+                        Text = "When Alfie gets \"killed\" on the beach"
+                    }
+                    );
+
+                foreach(var reply in context.Replies)
+                {
+                    context.Posts.FirstOrDefault(p => p.Id == reply.PostId).ReplyCount++;
+                }
+
+                await context.SaveChangesAsync();
             }
         }
     }

@@ -1,0 +1,175 @@
+﻿.back {
+    border-bottom: 1px solid rgb(230, 236, 240);
+    display: flex;
+    align-items: center;
+    padding: 7px 10px 7px 10px;
+}
+
+    .back .icon-wrapper {
+        height: 39px;
+        width: 39px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        color: rgb(29, 161, 242);
+        transition-duration: 0.2s;
+        cursor: pointer;
+    }
+
+        .back .icon-wrapper:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+            color: rgb(29, 161, 242);
+        }
+
+    .back .add-list {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .back .lists {
+        margin-left: 4%;
+        font-size: 19px;
+        font-weight: bold;
+        color: rgb(20, 23, 26);
+    }
+
+.lists-container {
+    width: 100%;
+}
+
+    .lists-container .list {
+        width: 100%;
+        padding: 2.5% 2.5% 2.5% 2.5%;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition-duration: 0.2s;
+    }
+
+        .lists-container .list:hover {
+            background-color: rgb(245, 248, 250);
+        }
+
+        .lists-container .list .icon-wrapper {
+            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+        }
+
+            .lists-container .list .icon-wrapper img {
+                border-radius: 12px;
+                width: 100%;
+                height: 100%;
+                object-fit: fill;
+            }
+
+        .lists-container .list .name {
+            margin-left: 2%;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+/*modal-create*/
+#modal-create {
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+}
+
+    #modal-create .content {
+        position: relative;
+        width: 32%;
+        height: 32%;
+        top: 5%;
+        background-color: white;
+        border-radius: 15px;
+    }
+
+        #modal-create .content .header {
+            height: 16%;
+            width: 100%;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            margin-bottom: 2%;
+        }
+
+            #modal-create .content .header .X {
+                height: 90%;
+                width: auto;
+                margin-left: 3%;
+                margin-bottom: 1%;
+                font-size: 36px;
+                color: rgb(29, 161, 242);
+                cursor: pointer;
+            }
+
+        #modal-create .content .body {
+            height: 82%;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+            #modal-create .content .body form {
+                width: 100%;
+                height: 100%;
+                border-bottom-right-radius: 15px;
+                border-bottom-left-radius: 15px;
+                background-color: white;
+            }
+
+                #modal-create .content .body form .details {
+                    width: 100%;
+                    height: 75%;
+                }
+
+                #modal-create .content .body form #name {
+                    width: 96%;
+                    display: block;
+                    background-color: inherit;
+                    color: inherit;
+                    outline: none;
+                    padding: 10px;
+                    margin-left: 2%;
+                    margin-right: 2%;
+                    margin-bottom: 2%;
+                    border: 1px solid rgb(230, 236, 240);
+                    border-radius: 5px;
+                }
+
+                #modal-create .content .body form #description {
+                    width: 96%;
+                    display: block;
+                    background-color: inherit;
+                    color: inherit;
+                    outline: none;
+                    padding: 10px;
+                    margin-left: 2%;
+                    margin-right: 2%;
+                    margin-bottom: 2%;
+                    border: 1px solid rgb(230, 236, 240);
+                    border-radius: 5px;
+                }
+
+                #modal-create .content .body form .submit {
+                    width: 100%;
+                    height: 25%;
+                    display: flex;
+                    align-items: center;
+                    border-bottom-right-radius: 15px;
+                    position: relative;
+                }
+
+                #modal-create .content .body form input[type=submit] {
+                    position: absolute;
+                    right: 3%;
+                    height: 64%;
+                    width: 14%;
+                    font-weight: bold;
+                }

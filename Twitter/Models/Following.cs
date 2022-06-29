@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace Twitter.Models
 {
-    public class Following  // Define composite primary key with HasKey(UserId, FollowerId) in DbContext
-    {                       // ako ne funkcionira so composite key probaj so unique auto-incremented key
+    public class Following
+    {
+        [Key]
+        [Required]
+        public int Id { get; set; }
+
         [ForeignKey("FollowedUser")]
         [Required]
         public int FollowedUserId { get; set; }

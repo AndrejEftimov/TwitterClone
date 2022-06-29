@@ -1,0 +1,78 @@
+﻿@model ListIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    ViewData["nav"] = "Lists";
+}
+
+<link rel="stylesheet" href="~/css/ListIndex.css" />
+
+<div class="back">
+    <a class="icon-wrapper">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="lists">
+        Lists
+    </div>
+    <a id="create-list" class="icon-wrapper add-list">
+        <i class="fas fa-plus"></i>
+    </a>
+</div>
+
+<div class="lists-container">
+
+    @foreach (List l in Model.Lists)
+    {
+        <a class="list" asp-controller="List" asp-action="Details" asp-route-listId="@l.Id">
+            <div class="icon-wrapper">
+                <img src="~/images/@l.CoverImage" >
+            </div>
+            <div class="name">
+                @l.Name
+            </div>
+        </a>
+    }
+
+</div>
+
+<div id="modal-create" class="modal-container">
+    <div class="content">
+        <div class="header">
+            <a class="X">&times;</a>
+        </div>
+        <div class="body">
+            <form asp-controller="Lists" asp-action="Create" method="post">
+                <div class="details">
+                    <input id="name" placeholder="Name" />
+                    <input id="description" placeholder="Description" />
+                </div>
+                <div class="submit">
+                    <input class="button" type="submit" value="Create" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // modal-create
+        var btnCreate = document.getElementById('create-list');
+        var modalCreate = document.getElementById('modal-create');
+        var modalCreate_close = modalCreate.getElementsByClassName('X')[0];
+
+        btnCreate.onclick = function () {
+            modalCreate.style.visibility = 'visible';
+            modalCreate.style.opacity = 1;
+        }
+
+        modalCreate_close.onclick = function () {
+            modalCreate.style.visibility = "hidden";
+        }
+
+        modalCreate.onclick = function (event) {
+            if (event.target == modalCreate) {
+                modalCreate.style.visibility = 'hidden';
+                modalCreate.style.opacity = 0;
+            }
+        }
+</script>

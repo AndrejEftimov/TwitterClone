@@ -1,0 +1,80 @@
+﻿@model ListDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="~/css/ListDetails.css" />
+
+<div class="back">
+    <a class="icon-wrapper">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="list-name">
+        @Model.List.Name
+    </div>
+</div>
+
+<div class="list-container">
+    <div class="cover">
+        <img src="~/images/@Model.List.CoverImage" />
+    </div>
+    <div class="details">
+        <div class="name">
+            @Model.List.Name
+        </div>
+        <div class="description">
+            @Model.List.Description
+        </div>
+        <div class="members">
+            <span class="member-count">@Model.List.ListMembers.Count</span>&nbsp;Members
+        </div>
+        <div class="btn-wrapper">
+            <a class="button">Edit List</a>
+        </div>
+    </div>
+</div>
+
+@foreach (Post p in Model.Posts)
+{
+    <div class="post">
+        <div class="image">
+            <div class="img-wrapper">
+                <img src="~/images/@p.User.ProfileImage" />
+            </div>
+        </div>
+        <div class="content">
+            <div class="header">
+                <div class="display-name">
+                    @p.User.DisplayName
+                </div>
+                <div class="user-name">
+                    &nbsp;&#64;@p.User.UserName
+                </div>
+                <div class="date">
+                    &nbsp;&middot;&nbsp;@p.DateCreated
+                </div>
+            </div>
+            <div class="text">
+                @p.Text
+            </div>
+            <div class="img-wrapper">
+                <img src="~/images/@p.Image" />
+            </div>
+            <div class="actions">
+                <div class="comment">
+                    <i class="far fa-comment"></i>
+                    <div class="comment-count">
+                        @p.ReplyCount
+                    </div>
+                </div>
+                <div class="heart">
+                    <i class="far fa-heart"></i>
+                    <div class="heart-count">
+                        @p.HeartCount
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

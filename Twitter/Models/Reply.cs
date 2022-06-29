@@ -28,5 +28,13 @@ namespace Twitter.Models
         [Required]
         [StringLength(255, MinimumLength = 1)]
         public string Text { get; set; }
+
+        [Required]
+        [Display(Name = "Date Created")]
+        public DateTime DateCreated { get; set; } = DateTime.Now;
+
+        public int HeartCount { get; set; } = 0;
+
+        public ICollection<Heart> Hearts { get; set; }
     }
 }

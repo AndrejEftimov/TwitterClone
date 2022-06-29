@@ -13,11 +13,14 @@ namespace Twitter.Models
         public int Id { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string UserName { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string DisplayName { get; set; }
 
+        [StringLength(255)]
         public string? Description { get; set; }
 
         [Display(Name = "Follower Count")]

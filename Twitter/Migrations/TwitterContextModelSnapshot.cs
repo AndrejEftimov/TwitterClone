@@ -17,7 +17,7 @@ namespace Twitter.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -230,13 +230,21 @@ namespace Twitter.Migrations
 
             modelBuilder.Entity("Twitter.Models.Following", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("FollowedUserId")
                         .HasColumnType("int");
 
                     b.Property<int>("FollowerId")
                         .HasColumnType("int");
 
-                    b.HasKey("FollowedUserId", "FollowerId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedUserId");
 
                     b.HasIndex("FollowerId");
 
@@ -245,13 +253,28 @@ namespace Twitter.Migrations
 
             modelBuilder.Entity("Twitter.Models.Heart", b =>
                 {
-                    b.Property<int>("PostId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("PostId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReplyId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("PostId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ReplyId");
 
                     b.HasIndex("UserId");
 
@@ -266,8 +289,15 @@ namespace Twitter.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CoverImage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -283,28 +313,44 @@ namespace Twitter.Migrations
 
             modelBuilder.Entity("Twitter.Models.ListFollower", b =>
                 {
-                    b.Property<int>("ListId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("FollowerId")
                         .HasColumnType("int");
 
-                    b.HasKey("ListId", "FollowerId");
+                    b.Property<int>("ListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("FollowerId");
+
+                    b.HasIndex("ListId");
 
                     b.ToTable("ListFollower");
                 });
 
             modelBuilder.Entity("Twitter.Models.ListMember", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("ListId")
                         .HasColumnType("int");
 
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
-                    b.HasKey("ListId", "MemberId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
 
                     b.HasIndex("MemberId");
 
@@ -319,14 +365,14 @@ namespace Twitter.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Attachment")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("HeartCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ReplyCount")
                         .HasColumnType("int");
@@ -339,7 +385,15 @@ namespace Twitter.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Video")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("Id"), new[] { "UserId", "DateCreated" });
 
                     b.HasIndex("UserId");
 
@@ -353,6 +407,12 @@ namespace Twitter.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HeartCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("PostId")
                         .HasColumnType("int");
@@ -390,11 +450,13 @@ namespace Twitter.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("FollowerCount")
                         .HasColumnType("int");
@@ -408,7 +470,8 @@ namespace Twitter.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -502,6 +565,12 @@ namespace Twitter.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Twitter.Models.Reply", "Reply")
+                        .WithMany("Hearts")
+                        .HasForeignKey("ReplyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Twitter.Models.User", "User")
                         .WithMany("Hearts")
                         .HasForeignKey("UserId")
@@ -509,6 +578,8 @@ namespace Twitter.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
+
+                    b.Navigation("Reply");
 
                     b.Navigation("User");
                 });
@@ -604,6 +675,11 @@ namespace Twitter.Migrations
                     b.Navigation("Hearts");
 
                     b.Navigation("Replies");
+                });
+
+            modelBuilder.Entity("Twitter.Models.Reply", b =>
+                {
+                    b.Navigation("Hearts");
                 });
 
             modelBuilder.Entity("Twitter.Models.User", b =>

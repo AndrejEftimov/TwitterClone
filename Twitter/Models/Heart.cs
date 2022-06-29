@@ -7,13 +7,21 @@ using System.Threading.Tasks;
 
 namespace Twitter.Models
 {
-    public class Heart  // Define composite primary key with HasKey(PostId, UserId) in DbContext
-    {                   // ako ne funkcionira so composite key probaj so unique auto-incremented key
-        [ForeignKey("Post")]
+    public class Heart
+    {
+        [Key]
         [Required]
-        public int PostId { get; set; }
+        public int Id { get; set; }
+
+        [ForeignKey("Post")]
+        public int? PostId { get; set; }
 
         public Post Post { get; set; }
+
+        [ForeignKey("Reply")]
+        public int? ReplyId { get; set; }
+
+        public Reply Reply { get; set; }
 
         [ForeignKey("User")]
         [Required]

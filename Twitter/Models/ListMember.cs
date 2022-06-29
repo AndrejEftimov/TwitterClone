@@ -7,15 +7,19 @@ using System.Threading.Tasks;
 
 namespace Twitter.Models
 {
-    public class ListMember // Define composite primary key with HasKey(PostId, UserId) in DbContext
-    {                       // ako ne funkcionira so composite key probaj so unique auto-incremented key
+    public class ListMember
+    {
+        [Key]
+        [Required]
+        public int Id { get; set; }
+
         [ForeignKey("List")]
         [Required]
         public int ListId { get; set; }
 
         public List List { get; set; }
 
-        [ForeignKey("User")]
+        [ForeignKey("Member")]
         [Required]
         public int MemberId { get; set; }
 

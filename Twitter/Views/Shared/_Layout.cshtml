@@ -1,49 +1,203 @@
-﻿<!DOCTYPE html>
+﻿@model BaseViewModel
+@using Microsoft.AspNetCore.Identity
+@using Twitter.Areas.Identity.Data
+@using Twitter.Data
+
+@{
+    User user = Model.LoggedInUser;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Twitter</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" /> <!--fontawesome-->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Twitter.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/_Layout.css" />
 </head>
 <body>
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Twitter</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <nav>
+            <a asp-controller="Home" asp-action="Index">
+                <div class="fa-twitter-div"><i class="fab fa-twitter"></i></div>
+            </a>
+            <a asp-controller="Home" asp-action="Index">
+                <div class="@( (string) ViewData["nav"] == "Home" ? "highlightNav" : "")"><i class="fas fa-home home-align font-22"></i>&nbsp;&nbsp;&nbsp;&nbsp;Home</div>
+            </a>
+            <a asp-controller="User" asp-action="Index" asp-route-userId="@user.Id">
+                <div class="@( (string) ViewData["nav"] == "Profile" ? "highlightNav" : "")"><i class="fas fa-user font-22"></i>&nbsp;&nbsp;&nbsp;&nbsp;Profile</div>
+            </a>
+            <a asp-controller="List" asp-action="Index">
+                <div class="@( (string) ViewData["nav"] == "Lists" ? "highlightNav" : "")"><i class="fas fa-bars font-22"></i>&nbsp;&nbsp;&nbsp;&nbsp;Lists</div>
+            </a>
+            <a asp-controller="Search" asp-action="Index">
+                <div class="@( (string) ViewData["nav"] == "Search" ? "highlightNav" : "")"><i class="fas fa-search font-22 search-align"></i>&nbsp;&nbsp;&nbsp;&nbsp;Search</div>
+            </a>
         </nav>
+
+        <button class="button tweet-btn">Tweet</button>
+
+        <div id="profile-info">
+            <div class="img-wrapper">
+                <img src="~/images/@user.ProfileImage" />
+            </div>
+
+            <div class="text-wrapper">
+                @user.DisplayName
+            </div>
+
+            <i class="fas fa-chevron-down icon-wrapper"></i>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <div class="main">
+        @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - Twitter - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="right-header">
+        <form class="search">
+            <i class="fas fa-search fa-form-icon"></i>
+            <input placeholder="Search" id="search-input" />
+        </form>
+
+        <div class="recently-followed">
+            <div class="header">Recently followed</div>
+            <a class="profile">
+                <div class="img-wrapper">
+                    <img src="~/images/Desert.jpg" />
+                </div>
+
+                <div class="text-wrapper">a_eftimov</div>
+
+                <i class="fas fa-chevron-right icon-wrapper"></i>
+            </a>
+            <a class="profile">
+                <div class="img-wrapper">
+                    <img src="~/images/Desert.jpg" />
+                </div>
+
+                <div class="text-wrapper">a_eftimov</div>
+
+                <i class="fas fa-chevron-right icon-wrapper"></i>
+            </a>
+            <a class="footer">
+                Show more
+            </a>
         </div>
-    </footer>
+    </div>
+
+    <div id="modal-tweet" class="modal-container">
+        <div class="content">
+            <div class="header">
+                <a class="X">&times;</a>
+            </div>
+            <div class="body">
+                <div class="image">
+                    <div class="img-wrapper">
+                        <img src="~/images/@user.ProfileImage" />
+                    </div>
+                </div>
+                <form asp-controller="Posts" asp-action="Create" method="post">
+                    <textarea placeholder="What's happening?"></textarea>
+                    <div class="file-and-submit">
+                        <label for="file-input">
+                            <i class="fas fa-image"></i>
+                        </label>
+                        <input type="file" id="file-input" />
+                        <div class="img-wrapper">
+                            <img id="input-img" />
+                            <div class="remove">&times;</div>
+                        </div>
+                        <input class="button" type="submit" value="Tweet" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-logout" class="modal-container">
+        <div class="content">
+            <a asp-area="Identity" asp-page="/Account/Logout">
+                Log out
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        // modal-tweet
+        var tweet_btn = document.getElementsByClassName('tweet-btn')[0];
+        var tweet_modal = document.getElementById('modal-tweet');
+        var tweet_close = tweet_modal.getElementsByClassName('X')[0];
+
+        tweet_btn.onclick = function () {
+            tweet_modal.style.visibility = "visible";
+        }
+
+        tweet_close.onclick = function () {
+            tweet_modal.style.visibility = "hidden";
+        }
+
+        tweet_modal.onclick = function (event) {
+            if (event.target == tweet_modal) {
+                tweet_modal.style.visibility = "hidden";
+            }
+        }
+
+        // modal-tweet -> display image from input
+        function showImage(input, image) {
+            var fr = new FileReader();
+            // when image is loaded, set the src of the image where you want to display it
+            fr.onload = function (e) { image.src = this.result; };
+            input.addEventListener("change", function () {
+                // fill fr with image data
+                fr.readAsDataURL(input.files[0]);
+            });
+        }
+
+        var image = document.getElementById('input-img');
+        var input = document.getElementById('file-input');
+        showImage(input, image);
+
+        image.onclick = function () {
+            image.src = '';
+            $('#file-input').val('');
+        }
+
+        // modal-logout
+        var btnLogout = document.getElementById('profile-info');
+        var modalLogout = document.getElementById('modal-logout');
+
+        btnLogout.onclick = function () {
+            modalLogout.style.visibility = 'visible';
+            modalLogout.style.opacity = 1;
+        }
+
+        modalLogout.onclick = function (event) {
+            if (event.target == modalLogout) {
+                modalLogout.style.visibility = 'hidden';
+                modalLogout.style.opacity = 0;
+            }
+        }
+
+        // search focus
+        $('#search-input').on('focus', function () {
+            $(this).parent().addClass('searchOnFocus');
+            $(this).siblings().addClass('fa-form-iconOnFocus')
+        }).on('focusout', function () {
+            $(this).parent().removeClass('searchOnFocus');
+            $(this).siblings().removeClass('fa-form-iconOnFocus');
+        })
+    </script>
 </body>
 </html>

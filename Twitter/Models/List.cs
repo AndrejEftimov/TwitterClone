@@ -24,6 +24,11 @@ namespace Twitter.Models
         [Display(Name = "List Name")]
         public string Name { get; set; }
 
+        [StringLength(255)]
+        public string? Description { get; set; }
+
+        public string? CoverImage { get; set; } = "_DefaultListCover.png";
+
         public ICollection<ListMember> ListMembers { get; set; }
 
         public ICollection<ListFollower> ListFollowers { get; set; }

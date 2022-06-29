@@ -1,0 +1,551 @@
+header {
+    height: 100%;
+    position: fixed;
+    width: 31%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: white;
+}
+
+.main {
+    position: relative;
+    min-height: 100%;
+    width: 31.5%;
+    margin-left: 31%;
+    background-color: white;
+    border-left: 1px solid rgb(230, 236, 240);
+    border-right: 1px solid rgb(230, 236, 240);
+}
+
+nav {
+    /*height: 39%;*/
+    width: 40%;
+    margin-left: 60%;
+}
+
+    nav a {
+        display: block;
+        padding-top: 1%;
+        padding-bottom: 6%;
+        font-weight: bold;
+        font-size: 19px;
+        cursor: pointer;
+    }
+
+        nav a div {
+            height: 100%;
+            display: inline-block;
+            padding: 3.5% 10% 4% 5%; /* top right bottom left */
+            border-radius: 100px;
+            transition-duration: 0.2s;
+            color: rgb(20, 23, 26);
+        }
+
+        nav a:hover div {
+            background-color: rgba(29, 161, 242, 0.1);
+            color: rgb(29, 161, 242);
+        }
+
+        nav a .highlightNav {
+            background-color: rgba(29, 161, 242, 0.1);
+            color: rgb(29, 161, 242);
+        }
+
+.home-align {
+    margin-left: -3px;
+    margin-right: -2px;
+}
+
+.search-align {
+    margin-left: 1px;
+    margin-right: -3px;
+}
+
+.font-22 {
+    font-size: 22px;
+}
+
+.fa-twitter-div {
+    padding-right: 3.5%;
+    padding-bottom: 2.5%;
+    padding-top: 1.5%;
+}
+
+.fa-twitter {
+    font-size: 29px;
+    margin-left: -4px;
+    margin-top: 6px;
+    color: rgb(29, 161, 242);
+    /*transform: rotateY(180deg);*/
+}
+
+.tweet-btn {
+    margin-left: 60%;
+    width: 36%;
+    height: 5%;
+    margin-top: 2%;
+    font-weight: bold;
+}
+
+#profile-info {
+    background-color: white;
+    width: 42%;
+    margin-left: 56%;
+    position: absolute;
+    bottom: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 9999px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+    #profile-info:hover {
+        background-color: rgba(29, 161, 242, 0.1);
+    }
+
+    #profile-info .img-wrapper {
+        width: 18%;
+        position: relative;
+    }
+
+        #profile-info .img-wrapper:after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+        }
+
+        #profile-info .img-wrapper img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+    #profile-info .text-wrapper {
+        width: 65%;
+        margin-left: 5%;
+        margin-right: 5%;
+        display: flex;
+        align-items: center;
+        font-size: medium;
+        overflow: hidden;
+        font-weight: bold;
+    }
+
+    #profile-info .icon-wrapper {
+        display: flex;
+        align-items: center;
+        color: black;
+    }
+
+.right-header {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 37.5%;
+    background-color: white;
+}
+
+.search {
+    width: 46%;
+    height: 4.5%;
+    background-color: rgb(230, 236, 240);
+    border-radius: 9999px;
+    border: none;
+    outline: none;
+    padding-left: 3%;
+    padding-right: 3%;
+    margin-left: 4.5%;
+    margin-top: 1%;
+    color: rgb(101, 119, 134);
+    font-size: 16px;
+}
+
+.searchOnFocus { /*applied using javascript (jquery)*/
+    background-color: white;
+    border: 1px solid rgb(29, 161, 242);
+    padding-left: calc(3% - 1px);
+}
+
+.fa-form-icon {
+    margin-right: 4%;
+}
+
+.fa-form-iconOnFocus { /*applied using javascript (jquery)*/
+    color: rgb(29, 161, 242);
+}
+
+#search-input {
+    height: 100%;
+    width: 85%;
+    display: inline;
+    border: none;
+    background-color: inherit;
+    color: inherit;
+    outline: none;
+}
+
+    #search-input:focus {
+        color: black;
+    }
+
+.recently-followed {
+    width: 46%;
+    margin-left: 4.5%;
+    margin-top: 2.5%;
+    display: block;
+    background-color: rgb(245, 248, 250);
+    border-radius: 15px;
+}
+
+    .recently-followed .header {
+        width: 100%;
+        padding-top: calc(7% - 1px);
+        padding-bottom: 7%;
+        line-height: 0;
+        padding-left: 5%;
+        display: flex;
+        align-items: center;
+        font-size: 19px;
+        font-weight: bold;
+        border-bottom: 1px solid rgb(230, 236, 240);
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+    }
+
+    .recently-followed .profile {
+        /*height: 30%;*/
+        width: 100%;
+        border-bottom: 1px solid rgb(230, 236, 240);
+        cursor: pointer;
+        transition-duration: 0.2s;
+        padding: 10px 10px 10px 15px;
+        display: flex;
+        flex-direction: row;
+    }
+
+        .recently-followed .profile:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .recently-followed .profile .img-wrapper {
+            width: 16%;
+            position: relative;
+        }
+
+            .recently-followed .profile .img-wrapper:after {
+                content: "";
+                display: block;
+                padding-bottom: 100%;
+            }
+
+            .recently-followed .profile .img-wrapper img {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+
+                .recently-followed .profile .img-wrapper img:hover {
+                    border: 2px solid rgba(245, 248, 250, 0);
+                }
+
+        .recently-followed .profile .text-wrapper {
+            width: 65%;
+            margin-left: 5%;
+            margin-right: 5%;
+            display: flex;
+            align-items: center;
+            font-size: medium;
+            overflow: hidden;
+            font-weight: bold;
+        }
+
+        .recently-followed .profile .icon-wrapper {
+            display: flex;
+            align-items: center;
+            color: black;
+        }
+
+    .recently-followed .footer {
+        width: 100%;
+        padding-top: calc(7% + 1px);
+        padding-bottom: calc(7% + 1px);
+        line-height: 0;
+        padding-left: 5%;
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        color: rgb(29, 161, 242);
+        cursor: pointer;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+        user-select: none;
+        transition-duration: 0.2s;
+    }
+
+        .recently-followed .footer:hover {
+            color: rgb(29, 161, 242);
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+#modal-tweet {
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+}
+
+    #modal-tweet .content {
+        position: relative;
+        width: 32%;
+        height: 32%;
+        top: 5%;
+        background-color: white;
+        border-radius: 15px;
+    }
+
+        #modal-tweet .content .header {
+            height: 18%;
+            width: 100%;
+            border-bottom: 1px solid rgb(204, 214, 221);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+        }
+
+            #modal-tweet .content .header .X {
+                height: 90%;
+                width: auto;
+                display: flex;
+                align-items: center;
+                margin-left: 3%;
+                margin-bottom: 1%;
+                font-size: 36px;
+                color: rgb(29, 161, 242);
+                cursor: pointer;
+            }
+
+        #modal-tweet .content .body {
+            height: 82%;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+            #modal-tweet .content .body .image {
+                width: 13%;
+                padding: 2%;
+                border-bottom-left-radius: 15px;
+                background-color: white;
+            }
+
+                #modal-tweet .content .body .image .img-wrapper {
+                    width: 100%;
+                    position: relative;
+                }
+
+                    #modal-tweet .content .body .image .img-wrapper:after {
+                        content: "";
+                        display: block;
+                        padding-bottom: 100%;
+                    }
+
+                    #modal-tweet .content .body .image .img-wrapper img {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: center;
+                    }
+
+            #modal-tweet .content .body form {
+                width: 87%;
+                height: 100%;
+                border-bottom-right-radius: 15px;
+                background-color: white;
+            }
+
+                #modal-tweet .content .body form textarea {
+                    display: block;
+                    width: 100%;
+                    height: 75%;
+                    border: none;
+                    resize: none;
+                    outline: none;
+                    padding-top: 4.5%;
+                    padding-right: 5%;
+                    font-size: 20px;
+                    overflow: -moz-hidden-unscrollable; /*firefox*/
+                }
+
+                    #modal-tweet .content .body form textarea::-webkit-scrollbar { /*chrome, safari & opera*/
+                        width: 4px;
+                    }
+
+                    #modal-tweet .content .body form textarea::-webkit-scrollbar-track { /*chrome, safari & opera*/
+                        background-color: white;
+                        border-radius: 9999px;
+                    }
+
+                    #modal-tweet .content .body form textarea::-webkit-scrollbar-thumb { /*chrome, safari & opera*/
+                        background-color: rgb(29, 161, 242);
+                        border-radius: 9999px;
+                    }
+
+                    #modal-tweet .content .body form textarea::placeholder {
+                        color: rgb(145, 151, 163);
+                    }
+
+                    #modal-tweet .content .body form textarea:focus::placeholder {
+                        color: rgba(145, 151, 163, 0.6);
+                    }
+
+                #modal-tweet .content .body form .file-and-submit {
+                    width: 100%;
+                    height: 25%;
+                    display: flex;
+                    align-items: center;
+                    border-bottom-right-radius: 15px;
+                    position: relative;
+                }
+
+                #modal-tweet .content .body form label {
+                    margin: 0;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                }
+
+                    #modal-tweet .content .body form label i {
+                        font-size: 25px;
+                        color: rgb(29, 161, 242);
+                    }
+
+                #modal-tweet .content .body form input[type=file] {
+                    display: none;
+                }
+
+                #modal-tweet .content .body form .img-wrapper {
+                    position: relative;
+                    height: 70%;
+                    max-width: 50%;
+                    margin-left: 2%;
+                    border-radius: 10px !important;
+                    cursor: pointer;
+                }
+
+                #modal-tweet .content .body form img {
+                    position: relative;
+                    height: 100%;
+                    max-width: 100%;
+                    border-radius: 10px !important;
+                    cursor: pointer;
+                    z-index: 1;
+                }
+
+                    #modal-tweet .content .body form img:hover {
+                        opacity: 0.1;
+                    }
+
+                        #modal-tweet .content .body form img:hover ~ .remove {
+                            visibility: visible;
+                        }
+
+                #modal-tweet .content .body form .remove {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    left: 0;
+                    top: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px !important;
+                    font-size: 40px;
+                    padding-bottom: 15%;
+                    line-height: 100px;
+                    color: rgb(29, 161, 242);
+                    z-index: 0;
+                    visibility: hidden;
+                }
+
+                #modal-tweet .content .body form input[type=submit] {
+                    position: absolute;
+                    right: 3%;
+                    height: 64%;
+                    width: 14%;
+                    font-weight: bold;
+                }
+
+/*modal-logout*/
+#modal-logout {
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transition-duration: 0.2s;
+}
+
+    #modal-logout .content {
+        width: 16%;
+        height: 8%;
+        position: absolute;
+        bottom: 8.5%;
+        left: 16%;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px 0px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+        #modal-logout .content a {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 5%;
+            background-color: white;
+            font-size: 19px;
+            cursor: pointer;
+            transition-duration: 0.2s;
+            border-radius: 4px;
+            color: rgb(33, 37, 41);
+        }
+
+            #modal-logout .content a:hover {
+                background-color: rgb(245, 248, 250);
+            }
+
+            #modal-logout .content a i {
+                position: absolute;
+                right: 6%;
+                transition-duration: 0.2s;
+            }
+
+            #modal-logout .content a:hover i {
+                color: rgb(29, 161, 242);
+            }

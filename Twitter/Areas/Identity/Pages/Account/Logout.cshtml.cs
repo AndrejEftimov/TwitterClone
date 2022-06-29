@@ -28,6 +28,8 @@ namespace Twitter.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            return LocalRedirect("/Identity/Account/Login");
+
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Twitter.Models
 {
-    // Define composite primary key with HasKey(PostId, UserId) in DbContext
-    // ako ne funkcionira so composite key probaj so unique auto-incremented key
     public class ListFollower
     {
+        [Key]
+        [Required]
+        public int Id { get; set; }
+
         [Required]
         [ForeignKey("List")]
         public int ListId { get; set; }

@@ -1,0 +1,9 @@
+﻿using Twitter.Models;
+
+namespace Twitter.ViewModels
+{
+    public class PostIndexViewModel : BaseViewModel
+    {
+        public Post? Post { get; set; }
+    }
+}

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Twitter.Areas.Identity.Data;
+using Twitter.Data;
 
 namespace Twitter.Areas.Identity.Pages.Account
 {
@@ -112,7 +113,13 @@ namespace Twitter.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+                // Get the user because PasswordSignInAsync() needs the user.UserName or user and NOT the Email
+                // Another alternative is to modify the PasswordSignInAsync() to use FindByEmailAsync() instead of FindByNameAsync()
+                // See https://stackoverflow.com/questions/23614121/identity-2-0-invalid-login-attempt for more info
+                var user = _signInManager.UserManager.FindByEmailAsync(Input.Email).Result;
+
+                var result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

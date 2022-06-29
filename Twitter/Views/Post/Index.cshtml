@@ -1,0 +1,138 @@
+﻿@model PostIndexViewModel
+
+@{
+    ViewData["Title"] = "Post";
+    ViewData["nav"] = "";
+}
+
+<link rel="stylesheet" href="~/css/PostsDetails.css" />
+
+<div class="back">
+    <a class="icon-wrapper">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+</div>
+
+<div class="post">
+    <div class="image-and-name">
+        <a class="img-wrapper" asp-controller="User" asp-action="index" asp-route-userId="@Model.Post.UserId">
+            <img src="~/images/@Model.Post.User.ProfileImage" />
+        </a>
+        <div class="name-wrapper">
+            <a class="display-name" asp-controller="User" asp-action="index" asp-route-userId="@Model.Post.UserId">
+                @Model.Post.User.DisplayName
+            </a>
+            <div class="user-name">
+                &#64;@Model.Post.User.UserName
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="text">
+            @Model.Post.Text
+        </div>
+        <div class="img-wrapper">
+            <img src="~/images/@Model.Post.Image" />
+        </div>
+        <div class="date">
+            @Model.Post.DateCreated
+        </div>
+    </div>
+    <div class="actions">
+        <div class="comment">
+            <i class="far fa-comment"></i>
+            <div class="comment-count">
+                @Model.Post.ReplyCount
+            </div>
+        </div>
+        <div class="heart">
+            <i class="far fa-heart"></i>
+            <div class="heart-count">
+                @Model.Post.HeartCount
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="comment-section">
+
+    @foreach (var r in Model.Post.Replies)
+    {
+        <div class="comment">
+            <div class="image">
+                <a class="img-wrapper" asp-controller="User" asp-action="Index" asp-route-userId="@r.UserId">
+                    <img src="~/images/@r.User.ProfileImage" />
+                </a>
+            </div>
+            <div class="content">
+                <div class="header">
+                    <a class="display-name" asp-controller="User" asp-action="Index" asp-route-userId="@r.UserId">
+                        @r.User.DisplayName
+                    </a>
+                    <div class="user-name">
+                        &nbsp;&#64;@r.User.UserName
+                    </div>
+                    <div class="date">
+                        &nbsp;&middot;&nbsp;@r.DateCreated
+                    </div>
+                </div>
+                <div class="text">
+                    @r.Text
+                </div>
+                <div class="actions">
+                    <div class="heart">
+                        <i class="far fa-heart"></i>
+                        <div class="heart-count">
+                            @r.HeartCount
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<div id="modal-comment" class="modal-container">
+    <div class="content">
+        <div class="header">
+            <a class="X">&times;</a>
+        </div>
+        <div class="body">
+            <div class="image">
+                <div class="img-wrapper">
+                    <img src="~/images/Desert.jpg" />
+                </div>
+            </div>
+            <form asp-controller="Post" asp-action="Create" method="post">
+                <!--CHANGE asp-controller and asp-action-->
+                <textarea placeholder="Leave your reply..."></textarea>
+                <div class="submit">
+                    <input class="button" type="submit" value="Reply" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // modal-comment
+    var post = document.getElementsByClassName('post')[0];
+    var comment_btn = post.getElementsByClassName('actions')[0].getElementsByClassName('comment')[0];
+    var comment_modal = document.getElementById('modal-comment');
+    var comment_close = comment_modal.getElementsByClassName('X')[0];
+
+    comment_btn.onclick = function () {
+        comment_modal.style.visibility = "visible";
+    }
+
+    comment_close.onclick = function () {
+        comment_modal.style.visibility = "hidden";
+    }
+
+    comment_modal.onclick = function (event) {
+        if (event.target == comment_modal) {
+            comment_modal.style.visibility = "hidden";
+        }
+    }
+</script>

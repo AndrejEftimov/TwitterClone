@@ -11,7 +11,7 @@ namespace Twitter.Data
 {
     public class TwitterContext : IdentityDbContext<TwitterUser>
     {
-        public TwitterContext (DbContextOptions<TwitterContext> options)
+        public TwitterContext(DbContextOptions<TwitterContext> options)
             : base(options)
         {
         }
@@ -50,12 +50,14 @@ namespace Twitter.Data
                 .HasForeignKey(p => p.PostId);
 
             modelBuilder.Entity<Heart>()
+                .HasOne<Reply>(h => h.Reply)
+                .WithMany(r => r.Hearts).OnDelete(DeleteBehavior.Restrict)
+                .HasForeignKey(h => h.ReplyId);
+
+            modelBuilder.Entity<Heart>()
                 .HasOne<User>(p => p.User)
                 .WithMany(p => p.Hearts).OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(p => p.UserId);
-
-            modelBuilder.Entity<Heart>()
-                .HasKey(o => new { o.PostId, o.UserId });
 
             modelBuilder.Entity<Following>()
                 .HasOne<User>(p => p.FollowedUser)
@@ -66,9 +68,6 @@ namespace Twitter.Data
                 .HasOne<User>(p => p.Follower)
                 .WithMany(p => p.Followed).OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(p => p.FollowerId);
-
-            modelBuilder.Entity<Following>()
-                .HasKey(o => new { o.FollowedUserId, o.FollowerId });
 
             modelBuilder.Entity<List>()
                 .HasOne<User>(p => p.Creator)
@@ -85,9 +84,6 @@ namespace Twitter.Data
                 .WithMany(p => p.MemberOf).OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(p => p.MemberId);
 
-            modelBuilder.Entity<ListMember>()
-                .HasKey(o => new { o.ListId, o.MemberId });
-
             modelBuilder.Entity<ListFollower>()
                 .HasOne<List>(p => p.List)
                 .WithMany(p => p.ListFollowers).OnDelete(DeleteBehavior.Restrict)
@@ -98,8 +94,11 @@ namespace Twitter.Data
                 .WithMany(p => p.ListsFollowing).OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(p => p.FollowerId);
 
-            modelBuilder.Entity<ListFollower>()
-                .HasKey(o => new { o.ListId, o.FollowerId });
+            //add indexing
+            modelBuilder.Entity<Post>()
+                .HasIndex(p => p.Id)
+                .IsUnique()
+                .IncludeProperties(p => new { p.UserId, p.DateCreated }); //included columns
         }
     }
 }

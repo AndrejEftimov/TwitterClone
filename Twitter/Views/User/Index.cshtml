@@ -1,0 +1,135 @@
+﻿@model UserIndexViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+
+    bool sameUser = false;
+
+    if (Model.LoggedInUser.Id == Model.User.Id)
+    {
+        ViewData["nav"] = "Profile";
+        sameUser = true;
+    }
+    else
+        ViewData["nav"] = "";
+}
+
+<link rel="stylesheet" href="~/css/UserIndex.css" />
+
+<div class="back">
+    <a class="icon-wrapper">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+</div>
+
+<div class="profile-container">
+    <div class="cover">
+        <img src="~/images/@Model.User.CoverImage" />
+    </div>
+    <div class="content">
+        <div class="image-and-actions">
+            <div class="img-wrapper">
+                <img src="~/images/@Model.User.ProfileImage" />
+            </div>
+            <div class="actions">
+                <a class="button @if(!sameUser)
+{
+                @((bool) ViewData["isFollowing"] == true ? "anchor-following" : "anchor-follow")
+}"
+                   hidden="@sameUser">
+                    @if (!sameUser)
+                    {
+                        @((bool) ViewData["isFollowing"] == true ? "Following" : "Follow")
+                    }
+                </a>
+                <a class="button edit-profile" hidden="@(sameUser != true)">
+                    Edit Profile
+                </a>
+            </div>
+        </div>
+        <div class="name-wrapper">
+            <div class="display-name">
+                @Model.User.DisplayName
+            </div>
+            <div class="user-name">
+                &#64;@Model.User.UserName
+            </div>
+        </div>
+        <div class="description">
+            @Model.User.Description
+        </div>
+        <div class="date-joined">
+            <i class="far fa-calendar-alt"></i>
+            Joined @Model.User.DateCreated
+        </div>
+        <div class="follower-wrapper">
+            <div class="following">
+                <span class="follow-count">@Model.User.FollowingCount</span> Following
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="followers">
+                <span class="follow-count">@Model.User.FollowerCount</span> Followers
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (Post p in Model.User.Posts)
+{
+    <div class="post">
+        <a class="overlay" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id"></a>
+        <div class="image">
+            <div class="img-wrapper">
+                <img src="~/images/@Model.User.ProfileImage" />
+            </div>
+        </div>
+        <div class="content">
+            <div class="header">
+                <div class="display-name">
+                    @Model.User.DisplayName
+                </div>
+                <div class="user-name">
+                    &nbsp;&#64;@Model.User.UserName
+                </div>
+                <div class="date">
+                    &nbsp;&middot;&nbsp;@Model.User.DateCreated
+                </div>
+            </div>
+            <div class="text">
+                @p.Text
+            </div>
+            <div class="img-wrapper">
+                <img src="~/images/@p.Image" />
+            </div>
+            <div class="actions">
+                <a class="comment" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id">
+                    <i class="far fa-comment"></i>
+                    <div class="comment-count">
+                        @p.ReplyCount
+                    </div>
+                </a>
+                <a class="heart">
+                    <i class="far fa-heart"></i>
+                    <div class="heart-count">
+                        @p.HeartCount
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    var actions = document.getElementsByClassName('profile-container')[0].getElementsByClassName('actions')[0];
+    var btn = actions.getElementsByClassName('button')[0];
+
+    if (btn.innerHTML == "Following") {
+        btn.onmouseover = function () {
+            btn.innerHTML = "Unfollow";
+        }
+
+        btn.onmouseout = function () {
+            btn.innerHTML = "Following";
+        }
+    }
+</script>
