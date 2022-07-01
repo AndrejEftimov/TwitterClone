@@ -17,7 +17,7 @@ namespace Twitter.Models
         [Required]
         public int CreatorId { get; set; }
 
-        public User Creator { get; set; }
+        public User? Creator { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 1)]
@@ -29,8 +29,8 @@ namespace Twitter.Models
 
         public string? CoverImage { get; set; } = "_DefaultListCover.png";
 
-        public ICollection<ListMember> ListMembers { get; set; }
+        public ICollection<ListMember>? ListMembers { get; set; }
 
-        public ICollection<ListFollower> ListFollowers { get; set; }
+        public ICollection<ListFollower>? ListFollowers { get; set; }
     }
 }

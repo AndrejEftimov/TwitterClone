@@ -36,20 +36,20 @@ namespace Twitter.Models
         [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; } = DateTime.Now.Date;
 
-        public ICollection<Post> Posts { get; set; }
+        public ICollection<Post>? Posts { get; set; }
 
-        public ICollection<Following> Followers { get; set; }
+        public ICollection<Following>? Followers { get; set; }
 
-        public ICollection<Following> Followed { get; set; }
+        public ICollection<Following>? Followed { get; set; }
 
-        public ICollection<Reply> Replies { get; set; }
+        public ICollection<Reply>? Replies { get; set; }
 
-        public ICollection<Heart> Hearts { get; set; }
+        public ICollection<Heart>? Hearts { get; set; }
 
-        public ICollection<List> ListsCreated { get; set; }
+        public ICollection<List>? ListsCreated { get; set; }
 
-        public ICollection<ListFollower> ListsFollowing { get; set; }
+        public ICollection<ListFollower>? ListsFollowing { get; set; }
 
-        public ICollection<ListMember> MemberOf { get; set; } // not used/needed in application
+        public ICollection<ListMember>? MemberOf { get; set; } // not used/needed in application
     }
 }

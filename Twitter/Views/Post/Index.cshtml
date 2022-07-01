@@ -5,7 +5,7 @@
     ViewData["nav"] = "";
 }
 
-<link rel="stylesheet" href="~/css/PostsDetails.css" />
+<link rel="stylesheet" href="~/css/PostIndex.css" />
 
 <div class="back">
     <a class="icon-wrapper">
@@ -28,12 +28,18 @@
         </div>
     </div>
     <div class="content">
-        <div class="text">
-            @Model.Post.Text
-        </div>
-        <div class="img-wrapper">
-            <img src="~/images/@Model.Post.Image" />
-        </div>
+        <div class="text show-white-space">@Model.Post.Text</div>
+        <div class="img-video-wrapper">
+                @if (!string.IsNullOrEmpty(Model.Post.Image))
+                {
+                    <img src="~/images/@Model.Post.Image" />
+                }
+                @if (!string.IsNullOrEmpty(Model.Post.Video))
+                {
+                    <video src="~/videos/@Model.Post.Video" controls>
+                    </video>
+                }
+            </div>
         <div class="date">
             @Model.Post.DateCreated
         </div>
@@ -101,12 +107,12 @@
         <div class="body">
             <div class="image">
                 <div class="img-wrapper">
-                    <img src="~/images/Desert.jpg" />
+                    <img src="~/images/@Model.LoggedInUser.ProfileImage" />
                 </div>
             </div>
-            <form asp-controller="Post" asp-action="Create" method="post">
-                <!--CHANGE asp-controller and asp-action-->
-                <textarea placeholder="Leave your reply..."></textarea>
+            <form asp-controller="Post" asp-action="Reply" method="post">
+                <input asp-for="Post.Id" hidden="true" />
+                <textarea placeholder="Leave your reply..." asp-for="ReplyText"></textarea>
                 <div class="submit">
                     <input class="button" type="submit" value="Reply" />
                 </div>

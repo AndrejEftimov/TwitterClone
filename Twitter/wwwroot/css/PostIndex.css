@@ -95,17 +95,22 @@
             margin-top: 1%;
         }
 
-        .post .content .img-wrapper {
+        .post .content .img-video-wrapper {
             width: 100%;
             margin-top: 2%;
         }
 
-            .post .content .img-wrapper img {
+            .post .content .img-video-wrapper img, video {
                 width: 100%;
                 border-radius: 15px !important;
                 border: 1px solid rgb(204, 214, 221);
                 object-fit: cover;
                 object-position: center;
+            }
+
+            .post .content .img-video-wrapper video:fullscreen{
+                object-fit: none;
+                border: none;
             }
 
         .post .content .date {

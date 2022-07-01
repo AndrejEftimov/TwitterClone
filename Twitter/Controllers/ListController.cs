@@ -20,6 +20,9 @@ namespace Twitter.Controllers
         // GET: List
         public async Task<IActionResult> Index()
         {
+            if (_LoggedInUser == null)
+                return LocalRedirect("/Identity/Account/Login");
+
             ICollection<List> lists = _context.Lists.Where(l => l.CreatorId == _LoggedInUser.Id).ToList();
 
             ListIndexViewModel viewModel = new ListIndexViewModel
@@ -34,7 +37,10 @@ namespace Twitter.Controllers
         // GET: List/Details/5
         public async Task<IActionResult> Details(int? listId)
         {
-            if(listId == null)
+            if (_LoggedInUser == null)
+                return LocalRedirect("/Identity/Account/Login");
+
+            if (listId == null)
                 return NotFound();
 
             List list = _context.Lists.FirstOrDefault(l => l.Id == listId);
@@ -46,7 +52,7 @@ namespace Twitter.Controllers
 
             var memberIds = _context.ListMember.Where(l => l.ListId == listId).Select(l => l.MemberId);
 
-            ICollection<Post> posts = _context.Posts.Where(p => memberIds.Contains(p.UserId)).Include(p => p.User).ToList();
+            ICollection<Post> posts = _context.Posts.Where(p => memberIds.Contains(p.UserId)).Include(p => p.User).OrderByDescending(p => p.DateCreated).ToList();
 
             ListDetailsViewModel viewModel = new ListDetailsViewModel
             {

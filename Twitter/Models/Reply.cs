@@ -17,13 +17,13 @@ namespace Twitter.Models
         [Required]
         public int PostId { get; set; }
 
-        public Post Post { get; set; }
+        public Post? Post { get; set; }
 
         [ForeignKey("User")]
         [Required]
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [Required]
         [StringLength(255, MinimumLength = 1)]
@@ -35,6 +35,6 @@ namespace Twitter.Models
 
         public int HeartCount { get; set; } = 0;
 
-        public ICollection<Heart> Hearts { get; set; }
+        public ICollection<Heart>? Hearts { get; set; }
     }
 }

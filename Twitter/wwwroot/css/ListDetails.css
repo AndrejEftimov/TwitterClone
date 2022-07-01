@@ -103,10 +103,28 @@
     transition-duration: 0.2s;
     font-size: 15px;
     line-height: 133%;
+    position: relative;
 }
 
     .post:hover {
         background-color: rgb(245, 248, 250);
+    }
+
+    .post a {
+        position: relative;
+        z-index: 1;
+    }
+
+    .post .overlay {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow: hidden;
+        text-indent: 100%;
+        white-space: nowrap;
+        position: absolute;
+        z-index: 0;
     }
 
     .post .image {
@@ -174,20 +192,25 @@
             display: flex;
         }
 
-        .post .content .img-wrapper {
+        .post .content .img-video-wrapper {
             width: 100%;
             display: flex;
             margin-top: 2%;
             margin-bottom: 1%;
         }
 
-            .post .content .img-wrapper img {
+            .post .content .img-video-wrapper img, video {
                 width: 100%;
                 max-height: 800px;
                 border-radius: 15px !important;
                 border: 1px solid rgb(204, 214, 221);
                 object-fit: cover;
                 object-position: center;
+            }
+
+            .post .content .img-video-wrapper video:fullscreen{
+                object-fit: none;
+                border: none;
             }
 
         .post .content .actions {

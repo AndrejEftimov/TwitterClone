@@ -301,14 +301,14 @@
             display: flex;
         }
 
-        .post .content .img-wrapper {
+        .post .content .img-video-wrapper {
             width: 100%;
             display: flex;
             margin-top: 2%;
             margin-bottom: 1%;
         }
 
-            .post .content .img-wrapper img {
+            .post .content .img-video-wrapper img, video {
                 width: 100%;
                 max-height: 800px;
                 border-radius: 15px !important;
@@ -317,72 +317,77 @@
                 object-position: center;
             }
 
-        .post .content .actions {
-            width: 100%;
+            .post .content .img-video-wrapper video:fullscreen{
+                object-fit: none;
+                border: none;
+            }
+
+            .post .content .actions {
+                width: 100%;
+                display: flex;
+                color: rgb(101, 119, 134);
+            }
+
+        .post .content .actions .comment {
+            margin-right: 20%;
             display: flex;
-            color: rgb(101, 119, 134);
         }
 
-            .post .content .actions .comment {
-                margin-right: 20%;
+            .post .content .actions .comment i {
+                margin-left: -5px;
+                width: 35px;
+                height: 35px;
                 display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 9999px;
+                transition-duration: 0.2s;
             }
 
-                .post .content .actions .comment i {
-                    margin-left: -5px;
-                    width: 35px;
-                    height: 35px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 9999px;
-                    transition-duration: 0.2s;
-                }
-
-                .post .content .actions .comment:hover i {
-                    color: rgb(29, 161, 242);
-                    background-color: rgba(29, 161, 242, 0.1);
-                }
-
-                .post .content .actions .comment .comment-count {
-                    display: flex;
-                    align-items: center;
-                    font-size: 13px;
-                    margin-left: 2px;
-                    transition-duration: 0.2s;
-                }
-
-                .post .content .actions .comment:hover .comment-count {
-                    color: rgb(29, 161, 242);
-                }
-
-            .post .content .actions .heart {
-                display: flex;
+            .post .content .actions .comment:hover i {
+                color: rgb(29, 161, 242);
+                background-color: rgba(29, 161, 242, 0.1);
             }
 
-                .post .content .actions .heart i {
-                    width: 35px;
-                    height: 35px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 9999px;
-                    transition-duration: 0.2s;
-                }
+            .post .content .actions .comment .comment-count {
+                display: flex;
+                align-items: center;
+                font-size: 13px;
+                margin-left: 2px;
+                transition-duration: 0.2s;
+            }
 
-                .post .content .actions .heart:hover i {
-                    color: rgb(224, 36, 94);
-                    background-color: rgba(224, 36, 94, 0.1);
-                }
+            .post .content .actions .comment:hover .comment-count {
+                color: rgb(29, 161, 242);
+            }
 
-                .post .content .actions .heart .heart-count {
-                    display: flex;
-                    align-items: center;
-                    font-size: 13px;
-                    margin-left: 2px;
-                    transition-duration: 0.2s;
-                }
+        .post .content .actions .heart {
+            display: flex;
+        }
 
-                .post .content .actions .heart:hover .heart-count {
-                    color: rgb(224, 36, 94);
-                }
+            .post .content .actions .heart i {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 9999px;
+                transition-duration: 0.2s;
+            }
+
+            .post .content .actions .heart:hover i {
+                color: rgb(224, 36, 94);
+                background-color: rgba(224, 36, 94, 0.1);
+            }
+
+            .post .content .actions .heart .heart-count {
+                display: flex;
+                align-items: center;
+                font-size: 13px;
+                margin-left: 2px;
+                transition-duration: 0.2s;
+            }
+
+            .post .content .actions .heart:hover .heart-count {
+                color: rgb(224, 36, 94);
+            }

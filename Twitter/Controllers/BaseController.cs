@@ -34,8 +34,12 @@ namespace Twitter.Controllers
         public async Task SetLoggedInUser()
         {
             TwitterUser currUser = await userManager.GetUserAsync(User);
-            _context.Entry(currUser).Reference(u => u.User).Load();
-            _LoggedInUser = currUser.User;
+
+            if(currUser != null)
+            {
+                _context.Entry(currUser).Reference(u => u.User).Load();
+                _LoggedInUser = currUser.User;
+            }
         }
     }
 }

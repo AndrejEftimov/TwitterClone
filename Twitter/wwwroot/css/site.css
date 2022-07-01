@@ -80,3 +80,7 @@ a {
         text-decoration: none;
         color: inherit;
     }
+
+.show-white-space {
+    white-space: pre-wrap;
+}

@@ -15,7 +15,12 @@ namespace Twitter.Controllers
 {
     public class PostController : BaseController
     {
-        public PostController(TwitterContext context, UserManager<TwitterUser> UserManager) : base(context, UserManager) { }
+        private readonly IWebHostEnvironment webHostEnvironment;
+
+        public PostController(TwitterContext context, UserManager<TwitterUser> UserManager, IWebHostEnvironment hostEnvironment) : base(context, UserManager)
+        {
+            webHostEnvironment = hostEnvironment;
+        }
 
         // GET: Post
         public async Task<IActionResult> Index(int? postId)
@@ -72,7 +77,8 @@ namespace Twitter.Controllers
         // GET: Post/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "DisplayName");
+
+
             return View();
         }
 
@@ -81,16 +87,58 @@ namespace Twitter.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,DateCreated,Text,Image,Video,HeartCount,ReplyCount")] Post post)
+        public async Task<IActionResult> Create(BaseViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (viewModel.NewPost.Text != null || viewModel.NewPost.formFile != null)
+                {
+                    string uniqueFileName = "";
+
+                    if (viewModel.NewPost.formFile != null)
+                        uniqueFileName = UploadedFile(viewModel.NewPost.formFile);
+
+                    Post post = new Post
+                    {
+                        UserId = _LoggedInUser.Id,
+                        Text = viewModel.NewPost.Text,
+                        Image = uniqueFileName
+                    };
+
+                    _context.Posts.Add(post);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "User");
+                }
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "DisplayName", post.UserId);
-            return View(post);
+
+            return RedirectToAction("Index", "User");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reply(PostIndexViewModel viewModel)
+        {
+            if (ModelState.IsValid && !string.IsNullOrEmpty(viewModel.ReplyText))
+            {
+                Reply reply = new Reply
+                {
+                    PostId = viewModel.Post.Id,
+                    UserId = _LoggedInUser.Id,
+                    Text = viewModel.ReplyText
+                };
+
+                Post post = _context.Posts.FirstOrDefault(p => p.Id == viewModel.Post.Id);
+                post.ReplyCount++;
+
+                _context.Replies.Add(reply);
+                _context.Posts.Update(post);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Post", new { postId = viewModel.Post.Id });
+            }
+
+            return RedirectToAction("Index", "Post", new { postId = viewModel.Post.Id });
         }
 
         // GET: Post/Edit/5
@@ -187,6 +235,24 @@ namespace Twitter.Controllers
         private bool PostExists(int id)
         {
             return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private string UploadedFile(IFormFile file)
+        {
+            string uniqueFileName = null;
+
+            if (file != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(file.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }

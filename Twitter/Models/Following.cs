@@ -17,12 +17,12 @@ namespace Twitter.Models
         [Required]
         public int FollowedUserId { get; set; }
 
-        public User FollowedUser { get; set; }
+        public User? FollowedUser { get; set; }
 
         [ForeignKey("Follower")]
         [Required]
         public int FollowerId { get; set; }
 
-        public User Follower { get; set; }
+        public User? Follower { get; set; }
     }
 }

@@ -17,14 +17,14 @@ namespace Twitter.Models
         [Required]
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [Required]
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
         [StringLength(255)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         public string? Image { get; set; }
 
@@ -34,8 +34,8 @@ namespace Twitter.Models
 
         public int ReplyCount { get; set; } = 0;
 
-        public ICollection<Reply> Replies { get; set; }
+        public ICollection<Reply>? Replies { get; set; }
 
-        public ICollection<Heart> Hearts { get; set; }
+        public ICollection<Heart>? Hearts { get; set; }
     }
 }

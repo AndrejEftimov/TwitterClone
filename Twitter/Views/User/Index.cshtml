@@ -92,14 +92,20 @@
                     &nbsp;&#64;@Model.User.UserName
                 </div>
                 <div class="date">
-                    &nbsp;&middot;&nbsp;@Model.User.DateCreated
+                    &nbsp;&middot;&nbsp;@p.DateCreated
                 </div>
             </div>
-            <div class="text">
-                @p.Text
-            </div>
-            <div class="img-wrapper">
-                <img src="~/images/@p.Image" />
+            <div class="text show-white-space">@p.Text</div>
+            <div class="img-video-wrapper">
+                @if (!string.IsNullOrEmpty(p.Image))
+                {
+                    <img src="~/images/@p.Image" />
+                }
+                @if (!string.IsNullOrEmpty(p.Video))
+                {
+                    <video src="~/videos/@p.Video" controls>
+                    </video>
+                }
             </div>
             <div class="actions">
                 <a class="comment" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id">

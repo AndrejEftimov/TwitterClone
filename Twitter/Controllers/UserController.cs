@@ -20,9 +20,16 @@ namespace Twitter.Controllers
         // GET: User
         public async Task<IActionResult> Index(int? userId)
         {
+            if (_LoggedInUser == null)
+                return LocalRedirect("/Identity/Account/Login");
+
+            if (userId == null)
+                userId = _LoggedInUser.Id;
+
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             _context.Entry<User>(user).Collection(u => u.Posts).Load();
+            user.Posts = user.Posts.OrderByDescending(p => p.DateCreated).ToList();
 
             if(_LoggedInUser.Id != user.Id)
             {

@@ -1,7 +1,4 @@
 ﻿@model BaseViewModel
-@using Microsoft.AspNetCore.Identity
-@using Twitter.Areas.Identity.Data
-@using Twitter.Data
 
 @{
     User user = Model.LoggedInUser;
@@ -102,13 +99,13 @@
                         <img src="~/images/@user.ProfileImage" />
                     </div>
                 </div>
-                <form asp-controller="Posts" asp-action="Create" method="post">
-                    <textarea placeholder="What's happening?"></textarea>
+                <form asp-controller="Post" asp-action="Create" method="post" enctype="multipart/form-data">
+                    <textarea asp-for="NewPost.Text" placeholder="What's happening?"></textarea>
                     <div class="file-and-submit">
                         <label for="file-input">
                             <i class="fas fa-image"></i>
                         </label>
-                        <input type="file" id="file-input" />
+                        <input asp-for="NewPost.formFile" type="file" id="file-input" />
                         <div class="img-wrapper">
                             <img id="input-img" />
                             <div class="remove">&times;</div>

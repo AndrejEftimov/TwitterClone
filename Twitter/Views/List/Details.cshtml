@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="~/css/ListDetails.css" />
 
 <div class="back">
-    <a class="icon-wrapper">
+    <a class="icon-wrapper" asp-controller="List" asp-action="index">
         <i class="fas fa-arrow-left"></i>
     </a>
     <div class="list-name">
@@ -38,16 +38,17 @@
 @foreach (Post p in Model.Posts)
 {
     <div class="post">
+        <a class="overlay" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id"></a>
         <div class="image">
-            <div class="img-wrapper">
+            <a class="img-wrapper" asp-controller="User" asp-action="Index" asp-route-userId="@p.UserId">
                 <img src="~/images/@p.User.ProfileImage" />
-            </div>
+            </a>
         </div>
         <div class="content">
             <div class="header">
-                <div class="display-name">
+                <a class="display-name" asp-controller="User" asp-action="Index" asp-route-userId="@p.UserId">
                     @p.User.DisplayName
-                </div>
+                </a>
                 <div class="user-name">
                     &nbsp;&#64;@p.User.UserName
                 </div>
@@ -55,19 +56,25 @@
                     &nbsp;&middot;&nbsp;@p.DateCreated
                 </div>
             </div>
-            <div class="text">
-                @p.Text
-            </div>
-            <div class="img-wrapper">
-                <img src="~/images/@p.Image" />
+            <div class="text show-white-space">@p.Text</div>
+            <div class="img-video-wrapper">
+                @if (!string.IsNullOrEmpty(p.Image))
+                {
+                    <img src="~/images/@p.Image" />
+                }
+                @if (!string.IsNullOrEmpty(p.Video))
+                {
+                    <video src="~/videos/@p.Video" controls>
+                    </video>
+                }
             </div>
             <div class="actions">
-                <div class="comment">
+                <a class="comment" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id">
                     <i class="far fa-comment"></i>
                     <div class="comment-count">
                         @p.ReplyCount
                     </div>
-                </div>
+                </a>
                 <div class="heart">
                     <i class="far fa-heart"></i>
                     <div class="heart-count">

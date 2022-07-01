@@ -16,17 +16,17 @@ namespace Twitter.Models
         [ForeignKey("Post")]
         public int? PostId { get; set; }
 
-        public Post Post { get; set; }
+        public Post? Post { get; set; }
 
         [ForeignKey("Reply")]
         public int? ReplyId { get; set; }
 
-        public Reply Reply { get; set; }
+        public Reply? Reply { get; set; }
 
         [ForeignKey("User")]
         [Required]
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

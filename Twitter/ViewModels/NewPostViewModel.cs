@@ -7,8 +7,6 @@ namespace Twitter.ViewModels
         [StringLength(255)]
         public string? Text { get; set; }
 
-        public string? Image { get; set; }
-
-        public string? Video { get; set; }
+        public IFormFile? formFile { get; set; }
     }
 }
