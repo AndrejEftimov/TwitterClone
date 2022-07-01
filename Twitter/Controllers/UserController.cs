@@ -15,7 +15,12 @@ namespace Twitter.Controllers
 {
     public class UserController : BaseController
     {
-        public UserController(TwitterContext context, UserManager<TwitterUser> userManager) : base(context, userManager) { }
+        private readonly IWebHostEnvironment webHostEnvironment;
+
+        public UserController(TwitterContext context, UserManager<TwitterUser> userManager, IWebHostEnvironment hostEnvironment) : base(context, userManager)
+        {
+            webHostEnvironment = hostEnvironment;
+        }
 
         // GET: User
         public async Task<IActionResult> Index(int? userId)
@@ -31,7 +36,7 @@ namespace Twitter.Controllers
             _context.Entry<User>(user).Collection(u => u.Posts).Load();
             user.Posts = user.Posts.OrderByDescending(p => p.DateCreated).ToList();
 
-            if(_LoggedInUser.Id != user.Id)
+            if (_LoggedInUser.Id != user.Id)
             {
                 bool isFollowing = _context.Followings.Any(f => f.FollowerId == _LoggedInUser.Id && f.FollowedUserId == userId);
 
@@ -46,6 +51,63 @@ namespace Twitter.Controllers
                 LoggedInUser = _LoggedInUser,
                 User = user
             };
+
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> Edit(int? userId)
+        {
+            if (_LoggedInUser == null)
+                return LocalRedirect("/Identity/Account/Login");
+
+            if (userId != _LoggedInUser.Id)
+                return LocalRedirect("/Identity/Account/AccessDenied");
+
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            UserEditViewModel viewModel = new UserEditViewModel
+            {
+                LoggedInUser = _LoggedInUser,
+                User = user
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserEditViewModel viewModel)
+        {
+            if (_LoggedInUser == null)
+                return LocalRedirect("/Identity/Account/Login");
+
+            if (viewModel.User.Id != _LoggedInUser.Id)
+                return LocalRedirect("/Identity/Account/AccessDenied");
+            
+            if (ModelState.IsValid)
+            {
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == viewModel.User.Id);
+
+                user.DisplayName = viewModel.User.DisplayName;
+                user.Description = viewModel.User.Description;
+
+                if (viewModel.ProfileImageFile != null)
+                {
+                    user.ProfileImage = UploadedFile(viewModel.ProfileImageFile);
+                }
+
+                if (viewModel.CoverImageFile != null)
+                {
+                    user.CoverImage = UploadedFile(viewModel.CoverImageFile);
+                }
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            viewModel.LoggedInUser = _LoggedInUser;
 
             return View(viewModel);
         }
@@ -91,7 +153,7 @@ namespace Twitter.Controllers
         }
 
         // GET: User/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> AdminEdit(int? id)
         {
             if (id == null || _context.Users == null)
             {
@@ -111,7 +173,7 @@ namespace Twitter.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,DisplayName,Description,FollowerCount,FollowingCount,ProfileImage,CoverImage,DateCreated")] User user)
+        public async Task<IActionResult> AdminEdit(int id, [Bind("Id,UserName,DisplayName,Description,FollowerCount,FollowingCount,ProfileImage,CoverImage,DateCreated")] User user)
         {
             if (id != user.Id)
             {
@@ -181,6 +243,24 @@ namespace Twitter.Controllers
         private bool UserExists(int id)
         {
             return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private string UploadedFile(IFormFile file)
+        {
+            string uniqueFileName = null;
+
+            if (file != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(file.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }

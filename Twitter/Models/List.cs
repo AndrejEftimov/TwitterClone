@@ -29,6 +29,10 @@ namespace Twitter.Models
 
         public string? CoverImage { get; set; } = "_DefaultListCover.png";
 
+        public int MemberCount { get; set; } = 0;
+
+        public int FollowerCount { get; set; } = 0;
+
         public ICollection<ListMember>? ListMembers { get; set; }
 
         public ICollection<ListFollower>? ListFollowers { get; set; }

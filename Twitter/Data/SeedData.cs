@@ -42,7 +42,7 @@ namespace Twitter.Data
             DbContextOptions<TwitterContext>>()))
             {
                 CreateUserRoles(serviceProvider).Wait();
-                
+
                 if (context.Users.Any() || context.Replies.Any() || context.Posts.Any() || context.ListMember.Any() ||
                     context.ListFollower.Any() || context.Lists.Any() || context.Hearts.Any() || context.Followings.Any())
                 {
@@ -268,6 +268,13 @@ namespace Twitter.Data
                     }
                     );
 
+                foreach (ListMember listMember in context.ListMember)
+                {
+                    context.Lists.FirstOrDefault(l => l.Id == listMember.ListId).MemberCount++;
+                }
+
+                await context.SaveChangesAsync();
+
                 context.ListFollower.AddRange(
                     new ListFollower
                     {
@@ -298,6 +305,12 @@ namespace Twitter.Data
                         FollowerId = context.Users.FirstOrDefault(u => u.UserName == "TomCruise").Id
                     }
                     );
+
+                foreach (ListFollower listFollower in context.ListFollower)
+                {
+                    context.Lists.FirstOrDefault(l => l.Id == listFollower.ListId).FollowerCount++;
+                }
+
                 await context.SaveChangesAsync();
 
                 // Add Followings
@@ -340,7 +353,7 @@ namespace Twitter.Data
                     );
                 await context.SaveChangesAsync();
 
-                foreach(Following following in context.Followings)
+                foreach (Following following in context.Followings)
                 {
                     context.Users.FirstOrDefault(u => u.Id == following.FollowerId).FollowingCount++;
                     context.Users.FirstOrDefault(u => u.Id == following.FollowedUserId).FollowerCount++;
@@ -364,7 +377,7 @@ namespace Twitter.Data
                     }
                     );
 
-                foreach(var reply in context.Replies)
+                foreach (var reply in context.Replies)
                 {
                     context.Posts.FirstOrDefault(p => p.Id == reply.PostId).ReplyCount++;
                 }

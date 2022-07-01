@@ -1,70 +1,68 @@
-﻿@model Twitter.Models.User
+﻿@model UserEditViewModel
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Edit Profile";
 }
 
-<h1>Edit</h1>
+<link rel="stylesheet" href="~/css/UserEdit.css" />
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DisplayName" class="control-label"></label>
-                <input asp-for="DisplayName" class="form-control" />
-                <span asp-validation-for="DisplayName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FollowerCount" class="control-label"></label>
-                <input asp-for="FollowerCount" class="form-control" />
-                <span asp-validation-for="FollowerCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FollowingCount" class="control-label"></label>
-                <input asp-for="FollowingCount" class="form-control" />
-                <span asp-validation-for="FollowingCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProfileImage" class="control-label"></label>
-                <input asp-for="ProfileImage" class="form-control" />
-                <span asp-validation-for="ProfileImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CoverImage" class="control-label"></label>
-                <input asp-for="CoverImage" class="form-control" />
-                <span asp-validation-for="CoverImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="back">
+    <a class="icon-wrapper">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="edit-profile">
+        Edit Profile
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<br />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<form asp-controller="User" asp-action="Edit" method="post" class="container edit-user-form" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="User.Id" hidden="true" />
+    <input asp-for="User.UserName" hidden="true" />
+    <div class="form-floating">
+        <input asp-for="User.DisplayName" class="form-control" />
+        <label asp-for="User.DisplayName" class="form-label"></label>
+        <span asp-validation-for="User.DisplayName" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-floating">
+        <input asp-for="User.Description" class="form-control" />
+        <label asp-for="User.Description" class="form-label"></label>
+        <span asp-validation-for="User.Description" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="control-label">Profile Image</label>
+        <div class="custom-file">
+            <input asp-for="ProfileImageFile" class="custom-file-input" id="customFile" />
+        </div>
+        <span asp-validation-for="ProfileImageFile" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="control-label">Cover Image</label>
+        <div class="custom-file">
+            <input asp-for="CoverImageFile" class="custom-file-input" id="customFile" />
+        </div>
+        <span asp-validation-for="CoverImageFile" class="text-danger"></span>
+    </div>
+    <br />
+
+    @*<label for="file-input">
+        <i class="fas fa-image"></i>
+        <p>Cover Image</p>
+        </label>
+        <br />
+        <input asp-for="CoverImageFile" type="file" id="file-input" />
+        <div class="img-wrapper">
+        <img id="input-img" />
+        <div class="remove">&times;</div>
+        </div>
+        <br />*@
+
+    <div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+    </div>
+</form>

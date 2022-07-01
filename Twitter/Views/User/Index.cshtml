@@ -11,7 +11,9 @@
         sameUser = true;
     }
     else
+    {
         ViewData["nav"] = "";
+    }
 }
 
 <link rel="stylesheet" href="~/css/UserIndex.css" />
@@ -32,8 +34,7 @@
                 <img src="~/images/@Model.User.ProfileImage" />
             </div>
             <div class="actions">
-                <a class="button @if(!sameUser)
-{
+                <a class="button @if(!sameUser){
                 @((bool) ViewData["isFollowing"] == true ? "anchor-following" : "anchor-follow")
 }"
                    hidden="@sameUser">
@@ -42,7 +43,7 @@
                         @((bool) ViewData["isFollowing"] == true ? "Following" : "Follow")
                     }
                 </a>
-                <a class="button edit-profile" hidden="@(sameUser != true)">
+                <a class="button edit-profile" hidden="@(!sameUser)" asp-controller="User" asp-action="Edit" asp-route-userId="@Model.User.Id">
                     Edit Profile
                 </a>
             </div>
@@ -60,7 +61,7 @@
         </div>
         <div class="date-joined">
             <i class="far fa-calendar-alt"></i>
-            Joined @Model.User.DateCreated
+            Joined @Model.User.DateCreated.ToShortDateString()
         </div>
         <div class="follower-wrapper">
             <div class="following">
@@ -126,6 +127,7 @@
 }
 
 <script>
+    // follow/unfollow
     var actions = document.getElementsByClassName('profile-container')[0].getElementsByClassName('actions')[0];
     var btn = actions.getElementsByClassName('button')[0];
 
@@ -138,4 +140,43 @@
             btn.innerHTML = "Following";
         }
     }
+
+    // modal-edit
+        var edit_btn = document.getElementsByClassName('edit-profile')[0];
+        var edit_modal = document.getElementById('modal-edit');
+        var edit_close = tweet_modal.getElementsByClassName('X')[0];
+
+        edit_btn.onclick = function () {
+            edit_modal.style.visibility = "visible";
+        }
+
+        edit_close.onclick = function () {
+            edit_modal.style.visibility = "hidden";
+        }
+
+        edit_modal.onclick = function (event) {
+            if (event.target == edit_modal) {
+                edit_modal.style.visibility = "hidden";
+            }
+        }
+
+        // modal-edit -> display image from input
+        function showImage(input, image) {
+            var fr = new FileReader();
+            // when image is loaded, set the src of the image where you want to display it
+            fr.onload = function (e) { image.src = this.result; };
+            input.addEventListener("change", function () {
+                // fill fr with image data
+                fr.readAsDataURL(input.files[0]);
+            });
+        }
+
+        var image = document.getElementById('input-img');
+        var input = document.getElementById('file-input');
+        showImage(input, image);
+
+        image.onclick = function () {
+            image.src = '';
+            $('#file-input').val('');
+        }
 </script>

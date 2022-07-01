@@ -1,7 +1,7 @@
 ﻿@model ListDetailsViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "List Details";
 }
 
 <link rel="stylesheet" href="~/css/ListDetails.css" />
@@ -27,10 +27,12 @@
             @Model.List.Description
         </div>
         <div class="members">
-            <span class="member-count">@Model.List.ListMembers.Count</span>&nbsp;Members
+            <span class="member-count">@Model.List.MemberCount</span>&nbsp;Members
+            &ensp;&ensp;
+            <span class="member-count">@Model.List.FollowerCount</span>&nbsp;Followers
         </div>
         <div class="btn-wrapper">
-            <a class="button">Edit List</a>
+            <a asp-controller="List" asp-action="Edit" asp-route-listId="@Model.List.Id" class="button">Edit List</a>
         </div>
     </div>
 </div>
@@ -75,12 +77,12 @@
                         @p.ReplyCount
                     </div>
                 </a>
-                <div class="heart">
+                <a class="heart">
                     <i class="far fa-heart"></i>
                     <div class="heart-count">
                         @p.HeartCount
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

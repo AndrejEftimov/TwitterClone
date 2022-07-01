@@ -41,10 +41,10 @@
             <a class="X">&times;</a>
         </div>
         <div class="body">
-            <form asp-controller="Lists" asp-action="Create" method="post">
+            <form asp-controller="List" asp-action="Create" method="post">
                 <div class="details">
-                    <input id="name" placeholder="Name" />
-                    <input id="description" placeholder="Description" />
+                    <input name="listName" type="text" id="name" placeholder="Name" />
+                    <input name="listDesc" type="text" id="description" placeholder="Description" />
                 </div>
                 <div class="submit">
                     <input class="button" type="submit" value="Create" />

@@ -1,40 +1,65 @@
-﻿@model Twitter.Models.List
+﻿@model ListEditViewModel
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Edit List";
 }
 
-<h1>Edit</h1>
+<link rel="stylesheet" href="~/css/ListEdit.css" />
 
-<h4>List</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatorId" class="control-label"></label>
-                <select asp-for="CreatorId" class="form-control" asp-items="ViewBag.CreatorId"></select>
-                <span asp-validation-for="CreatorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="back">
+    <a class="icon-wrapper">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="edit-list">
+        Edit List
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<br />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<form asp-controller="List" asp-action="Edit" method="post" class="container" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="List.Id" hidden="true" />
+    <input asp-for="List.CreatorId" hidden="true" />
+    <input asp-for="List.CoverImage" hidden="true" />
+    <div class="form-floating">
+        <input asp-for="List.Name" class="form-control" />
+        <label asp-for="List.Name" class="form-label"></label>
+        <span asp-validation-for="List.Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-floating">
+        <input asp-for="List.Description" class="form-control" />
+        <label asp-for="List.Description" class="form-label"></label>
+        <span asp-validation-for="List.Description" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="control-label">List Image</label>
+        <div class="custom-file">
+            <input asp-for="formFile" class="custom-file-input" id="customFile" />
+        </div>
+        <span asp-validation-for="formFile" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="UserIds" class="control-label">List Members</label>
+        <select asp-for="UserIds" class="form-control js-example-basic-multiple" multiple="multiple" asp-items="@Model.UserList">
+            <option value="">Select</option>
+        </select>
+        <span asp-validation-for="UserIds" class="text-danger"></span>
+    </div>
+    <br />
+    <div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+    </div>
+</form>
+
+<script src="~/lib/select2/js/select2.js"></script>
+<link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.js-example-basic-multiple').select2();
+    });
+</script>

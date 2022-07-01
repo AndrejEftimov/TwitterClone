@@ -29,7 +29,7 @@ namespace Twitter.Models
         [Display(Name = "Users Following")]
         public int FollowingCount { get; set; } = 0;
 
-        public string ProfileImage { get; set; } = "_DefaultProfile.png";
+        public string ProfileImage { get; set; } = "_DefaultProfile.webp";
 
         public string CoverImage { get; set; } = "_DefaultCover.png";
 

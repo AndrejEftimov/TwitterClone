@@ -295,7 +295,7 @@
                 object-position: center;
             }
 
-            .post .content .img-video-wrapper video:fullscreen{
+            .post .content .img-video-wrapper video:fullscreen {
                 object-fit: none;
                 border: none;
             }
