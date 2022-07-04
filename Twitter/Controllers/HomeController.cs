@@ -25,7 +25,8 @@ namespace Twitter.Controllers
 
             var usersFollowingIds = _context.Followings.Where(f => f.FollowerId == _LoggedInUser.Id).Select(f => f.FollowedUserId);
 
-            var posts = _context.Posts.Where(p => usersFollowingIds.Contains(p.UserId)).Include(p => p.User).OrderByDescending(p => p.DateCreated);
+            var posts = _context.Posts.Where(p => usersFollowingIds.Contains(p.UserId)).Include(p => p.User).OrderByDescending(p => p.DateCreated)
+                .Include(p => p.Hearts);
 
             HomeIndexViewModel viewModel = new HomeIndexViewModel
             {

@@ -34,7 +34,8 @@ namespace Twitter.Controllers
             Post post = _context.Posts.FirstOrDefault(p => p.Id == postId);
 
             _context.Entry(post).Reference(p => p.User).Load();
-            _context.Entry(post).Collection(p => p.Replies).Query().Include(r => r.User).Load();
+            _context.Entry(post).Collection(p => p.Replies).Query().Include(r => r.User).Include(r => r.Hearts).OrderByDescending(p => p.DateCreated).Load();
+            _context.Entry(post).Collection(p => p.Hearts).Load();
 
             if (post == null)
                 return NotFound();
@@ -139,6 +140,98 @@ namespace Twitter.Controllers
             }
 
             return RedirectToAction("Index", "Post", new { postId = viewModel.Post.Id });
+        }
+
+        [HttpPost]
+        // doesn't work with this DataAnnotation
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostHeart(int? postId)
+        {
+            if (postId == null)
+                return Ok();
+
+            Post post = _context.Posts.FirstOrDefault(p => p.Id == postId);
+            if (post == null)
+                return Ok();
+
+            Heart heart = _context.Hearts.FirstOrDefault(h => h.PostId == postId && h.UserId == _LoggedInUser.Id);
+            if (heart == null)
+            {
+                post.HeartCount++;
+
+                _context.Hearts.Add(
+                new Heart { PostId = postId, UserId = _LoggedInUser.Id }
+                );
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        // doesn't work with this DataAnnotation
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostUnheart(int? postId)
+        {
+            if (postId == null)
+                return Ok();
+
+            Post post = _context.Posts.FirstOrDefault(p => p.Id == postId);
+            if (post == null)
+                return Ok();
+
+            post.HeartCount--;
+            Heart heart = _context.Hearts.FirstOrDefault(h => h.PostId == postId && h.UserId == _LoggedInUser.Id);
+            _context.Hearts.Remove(heart);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
+        // doesn't work with this DataAnnotation
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReplyHeart(int? replyId)
+        {
+            if (replyId == null)
+                return Ok();
+
+            Reply reply = _context.Replies.FirstOrDefault(r => r.Id == replyId);
+            if (reply == null)
+                return Ok();
+
+            Heart heart = _context.Hearts.FirstOrDefault(h => h.ReplyId == replyId && h.UserId == _LoggedInUser.Id);
+            if (heart == null)
+            {
+                reply.HeartCount++;
+
+                _context.Hearts.Add(
+                new Heart { ReplyId = replyId, UserId = _LoggedInUser.Id }
+                );
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        // doesn't work with this DataAnnotation
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReplyUnheart(int? replyId)
+        {
+            if (replyId == null)
+                return Ok();
+
+            Reply reply = _context.Replies.FirstOrDefault(r => r.Id == replyId);
+            if (reply == null)
+                return Ok();
+
+            reply.HeartCount--;
+            Heart heart = _context.Hearts.FirstOrDefault(h => h.ReplyId == replyId && h.UserId == _LoggedInUser.Id);
+            _context.Hearts.Remove(heart);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // GET: Post/Edit/5

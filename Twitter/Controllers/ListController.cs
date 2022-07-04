@@ -57,7 +57,8 @@ namespace Twitter.Controllers
 
             var memberIds = _context.ListMember.Where(l => l.ListId == listId).Select(l => l.MemberId);
 
-            ICollection<Post> posts = _context.Posts.Where(p => memberIds.Contains(p.UserId)).Include(p => p.User).OrderByDescending(p => p.DateCreated).ToList();
+            ICollection<Post> posts = _context.Posts.Where(p => memberIds.Contains(p.UserId)).Include(p => p.User).Include(p => p.Hearts)
+                .OrderByDescending(p => p.DateCreated).ToList();
 
             ListDetailsViewModel viewModel = new ListDetailsViewModel
             {

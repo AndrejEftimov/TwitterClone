@@ -1,4 +1,22 @@
-﻿.top-header {
+﻿@keyframes heartbeat {
+    0% {
+        font-size: 1px;
+    }
+
+    33% {
+        font-size: 25px;
+    }
+
+    66% {
+        font-size: 19px;
+    }
+
+    100% {
+        font-size: 21px;
+    }
+}
+
+.top-header {
     display: flex;
     align-items: center;
     padding: 7px 10px 7px 10px;
@@ -317,77 +335,88 @@
                 object-position: center;
             }
 
-            .post .content .img-video-wrapper video:fullscreen{
+            .post .content .img-video-wrapper video:fullscreen {
                 object-fit: none;
                 border: none;
             }
 
-            .post .content .actions {
-                width: 100%;
-                display: flex;
-                color: rgb(101, 119, 134);
-            }
-
-        .post .content .actions .comment {
-            margin-right: 20%;
+        .post .content .actions {
+            width: 100%;
             display: flex;
+            color: rgb(101, 119, 134);
         }
 
-            .post .content .actions .comment i {
-                margin-left: -5px;
-                width: 35px;
-                height: 35px;
+            .post .content .actions .comment {
+                margin-right: 20%;
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 9999px;
-                transition-duration: 0.2s;
             }
 
-            .post .content .actions .comment:hover i {
-                color: rgb(29, 161, 242);
-                background-color: rgba(29, 161, 242, 0.1);
-            }
+                .post .content .actions .comment i {
+                    margin-left: -5px;
+                    width: 35px;
+                    height: 35px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 9999px;
+                    transition-duration: 0.2s;
+                }
 
-            .post .content .actions .comment .comment-count {
+                .post .content .actions .comment:hover i {
+                    color: rgb(29, 161, 242);
+                    background-color: rgba(29, 161, 242, 0.1);
+                }
+
+                .post .content .actions .comment .comment-count {
+                    display: flex;
+                    align-items: center;
+                    font-size: 13px;
+                    margin-left: 2px;
+                    transition-duration: 0.2s;
+                }
+
+                .post .content .actions .comment:hover .comment-count {
+                    color: rgb(29, 161, 242);
+                }
+
+            .post .content .actions .heart {
                 display: flex;
-                align-items: center;
-                font-size: 13px;
-                margin-left: 2px;
-                transition-duration: 0.2s;
             }
 
-            .post .content .actions .comment:hover .comment-count {
-                color: rgb(29, 161, 242);
-            }
+                .post .content .actions .heart i {
+                    width: 35px;
+                    height: 35px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 9999px;
+                    transition-duration: 0.2s;
+                }
 
-        .post .content .actions .heart {
-            display: flex;
-        }
+                .post .content .actions .heart:hover i {
+                    color: rgb(224, 36, 94);
+                    background-color: rgba(224, 36, 94, 0.1);
+                }
 
-            .post .content .actions .heart i {
-                width: 35px;
-                height: 35px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 9999px;
-                transition-duration: 0.2s;
-            }
+                .post .content .actions .heart .heart-count {
+                    display: flex;
+                    align-items: center;
+                    font-size: 13px;
+                    margin-left: 2px;
+                    transition-duration: 0.2s;
+                }
 
-            .post .content .actions .heart:hover i {
+                .post .content .actions .heart:hover .heart-count {
+                    color: rgb(224, 36, 94);
+                }
+
+            .post .content .actions .hearted i {
                 color: rgb(224, 36, 94);
-                background-color: rgba(224, 36, 94, 0.1);
+                animation-name: heartbeat;
+                animation-duration: 0.5s;
+                animation-timing-function: linear;
             }
 
-            .post .content .actions .heart .heart-count {
-                display: flex;
-                align-items: center;
-                font-size: 13px;
-                margin-left: 2px;
-                transition-duration: 0.2s;
-            }
-
-            .post .content .actions .heart:hover .heart-count {
+            .post .content .actions .hearted .heart-count {
                 color: rgb(224, 36, 94);
             }

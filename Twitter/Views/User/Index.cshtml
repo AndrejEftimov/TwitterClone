@@ -4,6 +4,7 @@
     ViewData["Title"] = "Profile";
 
     bool sameUser = false;
+    bool isHearted;
 
     if (Model.LoggedInUser.Id == Model.User.Id)
     {
@@ -77,6 +78,15 @@
 
 @foreach (Post p in Model.User.Posts)
 {
+    if (p.Hearts.Select(h => h.UserId).Contains(Model.LoggedInUser.Id))
+    {
+        isHearted = true;
+    }
+    else
+    {
+        isHearted = false;
+    }
+
     <div class="post">
         <a class="overlay" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id"></a>
         <div class="image">
@@ -111,20 +121,19 @@
             <div class="actions">
                 <a class="comment" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id">
                     <i class="far fa-comment"></i>
-                    <div class="comment-count">
-                        @p.ReplyCount
-                    </div>
+                    <span class="comment-count">@p.ReplyCount</span>
                 </a>
-                <a class="heart">
-                    <i class="far fa-heart"></i>
-                    <div class="heart-count">
-                        @p.HeartCount
-                    </div>
+                <a class="heart @(isHearted ? "hearted" : "")" data-postid="@p.Id" data-heartcount="@p.HeartCount">
+                    <i class="fa-heart @(isHearted ? "fa-solid" : "fa-regular")"></i>
+                    <span class="heart-count">@p.HeartCount</span>
                 </a>
             </div>
         </div>
     </div>
 }
+
+@section Scripts{
+<script src="~/js/Hearting.js" asp-append-version="true"></script>
 
 <script>
     // follow/unfollow
@@ -142,9 +151,9 @@
     }
 
     // modal-edit
-        var edit_btn = document.getElementsByClassName('edit-profile')[0];
+      /*var edit_btn = document.getElementsByClassName('edit-profile')[0];
         var edit_modal = document.getElementById('modal-edit');
-        var edit_close = tweet_modal.getElementsByClassName('X')[0];
+        var edit_close = edit_modal.getElementsByClassName('X')[0];
 
         edit_btn.onclick = function () {
             edit_modal.style.visibility = "visible";
@@ -178,5 +187,6 @@
         image.onclick = function () {
             image.src = '';
             $('#file-input').val('');
-        }
+        }*/
 </script>
+}

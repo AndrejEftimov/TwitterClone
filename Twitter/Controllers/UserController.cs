@@ -33,7 +33,7 @@ namespace Twitter.Controllers
 
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-            _context.Entry<User>(user).Collection(u => u.Posts).Load();
+            _context.Entry<User>(user).Collection(u => u.Posts).Query().Include(p => p.Hearts).Load();
             user.Posts = user.Posts.OrderByDescending(p => p.DateCreated).ToList();
 
             if (_LoggedInUser.Id != user.Id)

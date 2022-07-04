@@ -3,6 +3,17 @@
 @{
     ViewData["Title"] = "Post";
     ViewData["nav"] = "";
+    bool isHeartedPost;
+    bool isHeartedReply;
+
+    if (Model.Post.Hearts.Select(h => h.UserId).Contains(Model.LoggedInUser.Id))
+    {
+        isHeartedPost = true;
+    }
+    else
+    {
+        isHeartedPost = false;
+    }
 }
 
 <link rel="stylesheet" href="~/css/PostIndex.css" />
@@ -30,16 +41,16 @@
     <div class="content">
         <div class="text show-white-space">@Model.Post.Text</div>
         <div class="img-video-wrapper">
-                @if (!string.IsNullOrEmpty(Model.Post.Image))
-                {
-                    <img src="~/images/@Model.Post.Image" />
-                }
-                @if (!string.IsNullOrEmpty(Model.Post.Video))
-                {
-                    <video src="~/videos/@Model.Post.Video" controls>
-                    </video>
-                }
-            </div>
+            @if (!string.IsNullOrEmpty(Model.Post.Image))
+            {
+                <img src="~/images/@Model.Post.Image" />
+            }
+            @if (!string.IsNullOrEmpty(Model.Post.Video))
+            {
+                <video src="~/videos/@Model.Post.Video" controls>
+                </video>
+            }
+        </div>
         <div class="date">
             @Model.Post.DateCreated
         </div>
@@ -47,23 +58,28 @@
     <div class="actions">
         <div class="comment">
             <i class="far fa-comment"></i>
-            <div class="comment-count">
-                @Model.Post.ReplyCount
-            </div>
+            <span class="comment-count">@Model.Post.ReplyCount</span>
         </div>
-        <div class="heart">
-            <i class="far fa-heart"></i>
-            <div class="heart-count">
-                @Model.Post.HeartCount
-            </div>
-        </div>
+        <a class="heart @(isHeartedPost ? "hearted" : "")" data-postid="@Model.Post.Id" data-heartcount="@Model.Post.HeartCount">
+            <i class="fa-heart @(isHeartedPost ? "fa-solid" : "fa-regular")"></i>
+            <span class="heart-count">@Model.Post.HeartCount</span>
+        </a>
     </div>
 </div>
 
 <div class="comment-section">
 
-    @foreach (var r in Model.Post.Replies)
+    @foreach (Reply r in Model.Post.Replies)
     {
+        if(r.Hearts.Select(r => r.UserId).Contains(Model.LoggedInUser.Id))
+        {
+            isHeartedReply = true;
+        }
+        else
+        {
+            isHeartedReply = false;
+        }
+
         <div class="comment">
             <div class="image">
                 <a class="img-wrapper" asp-controller="User" asp-action="Index" asp-route-userId="@r.UserId">
@@ -86,12 +102,10 @@
                     @r.Text
                 </div>
                 <div class="actions">
-                    <div class="heart">
-                        <i class="far fa-heart"></i>
-                        <div class="heart-count">
-                            @r.HeartCount
-                        </div>
-                    </div>
+                    <a class="heart reply-heart @(isHeartedReply ? "hearted" : "")" data-replyid="@r.Id" data-heartcount="@r.HeartCount">
+                        <i class="fa-heart @(isHeartedReply ? "fa-solid" : "fa-regular")"></i>
+                        <span class="heart-count">@r.HeartCount</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -121,6 +135,9 @@
     </div>
 </div>
 
+@section Scripts{
+<script src="~/js/Hearting.js" asp-append-version="true"></script>
+
 <script>
     // modal-comment
     var post = document.getElementsByClassName('post')[0];
@@ -142,3 +159,4 @@
         }
     }
 </script>
+}

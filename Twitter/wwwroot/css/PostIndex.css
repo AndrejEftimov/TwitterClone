@@ -1,4 +1,40 @@
-﻿.back {
+﻿@keyframes heartbeat {
+    0% {
+        font-size: 1px;
+    }
+
+    33% {
+        font-size: 25px;
+    }
+
+    66% {
+        font-size: 19px;
+    }
+
+    100% {
+        font-size: 21px;
+    }
+}
+
+@keyframes heartbeatReply {
+    0% {
+        font-size: 1px;
+    }
+
+    33% {
+        font-size: 18px;
+    }
+
+    66% {
+        font-size: 13px;
+    }
+
+    100% {
+        font-size: 15px;
+    }
+}
+
+.back {
     border-bottom: 1px solid rgb(230, 236, 240);
     display: flex;
     align-items: center;
@@ -108,7 +144,7 @@
                 object-position: center;
             }
 
-            .post .content .img-video-wrapper video:fullscreen{
+            .post .content .img-video-wrapper video:fullscreen {
                 object-fit: none;
                 border: none;
             }
@@ -193,6 +229,17 @@
             }
 
             .post .actions .heart:hover .heart-count {
+                color: rgb(224, 36, 94);
+            }
+
+            .post .actions .hearted i {
+                color: rgb(224, 36, 94);
+                animation-name: heartbeat;
+                animation-duration: 0.5s;
+                animation-timing-function: linear;
+            }
+
+            .post .actions .hearted .heart-count {
                 color: rgb(224, 36, 94);
             }
 
@@ -322,6 +369,17 @@
                     .comment-section .comment .content .actions .heart:hover .heart-count {
                         color: rgb(224, 36, 94);
                     }
+
+                .comment-section .comment .content .actions .hearted i {
+                    color: rgb(224, 36, 94);
+                    animation-name: heartbeatReply;
+                    animation-duration: 0.5s;
+                    animation-timing-function: linear;
+                }
+
+                .comment-section .comment .content .actions .hearted .heart-count {
+                    color: rgb(224, 36, 94);
+                }
 
 #modal-comment {
     background-color: rgba(0, 0, 0, 0.4);

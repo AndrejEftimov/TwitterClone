@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Twitter.Data;
 using Microsoft.AspNetCore.Identity;
 using Twitter.Areas.Identity.Data;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,27 @@ builder.Services.AddControllersWithViews()
     {
         options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
         options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+    })
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
     });
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback)
+        //.AllowAnyOrigin()
+        //.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+        .AllowCredentials()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 
 //Password Strength Setting
 builder.Services.Configure<IdentityOptions>(options =>
@@ -76,6 +97,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

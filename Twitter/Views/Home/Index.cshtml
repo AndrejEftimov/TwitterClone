@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Home";
     ViewData["nav"] = "Home";
+    bool isHearted;
 }
 
 <link rel="stylesheet" href="~/css/HomeIndex.css" />
@@ -15,6 +16,15 @@
 
 @foreach (Post p in Model.Posts)
 {
+        if(p.Hearts.Select(h => h.UserId).Contains(Model.LoggedInUser.Id))
+        {
+            isHearted = true;
+        }
+        else
+        {
+            isHearted = false;
+        }
+
     <div class="post">
         <a class="overlay" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id"></a>
         <div class="image">
@@ -51,11 +61,15 @@
                     <i class="far fa-comment"></i>
                     <span class="comment-count">@p.ReplyCount</span>
                 </a>
-                <a class="heart">
-                    <i class="far fa-heart"></i>
+                <a class="heart @(isHearted ? "hearted" : "")" data-postid="@p.Id" data-heartcount="@p.HeartCount">
+                    <i class="fa-heart @(isHearted ? "fa-solid" : "fa-regular")"></i>
                     <span class="heart-count">@p.HeartCount</span>
                 </a>
             </div>
         </div>
     </div>
+}
+
+@section Scripts{
+    <script src="~/js/Hearting.js" asp-append-version="true"></script>
 }
