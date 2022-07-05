@@ -1,0 +1,111 @@
+﻿@model IEnumerable<User>
+
+@{
+    ViewData["Title"] = "AdminIndex";
+    Layout = "_AdminLayout";
+}
+<div style="display: flex; justify-content:space-evenly; align-items: center; padding: 1%; background-color: rgb(33, 37, 41);">
+
+    <h1 style="color: rgb(13, 110, 253); font-size: 45px;">
+        <i class="fa-solid fa-people-group"></i>
+        Users
+    </h1>
+
+    @*<a style="font-size: 28px; color: lightskyblue; font-weight: 500;" asp-action="Create">
+        <i class="fa-solid fa-plus"></i>
+        Create New
+        </a>*@
+
+    <form asp-controller="User" asp-action="AdminIndex" method="post">
+        <div class="row">
+            <div class="form-floating col">
+                <input name="userId" type="number" class="form-control" />
+                <label class="form-label">&nbsp; User Id</label>
+            </div>
+            <div class="form-floating col">
+                <input name="userName" type="text" class="form-control" />
+                <label class="form-label">&nbsp; User Name</label>
+            </div>
+            <div class="form-floating col">
+                <input name="userDesc" type="text" class="form-control" />
+                <label class="form-label">&nbsp; User Description</label>
+            </div>
+            <div class="form-floating col">
+                <button type="submit" class="w-100 btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<table class="table table-dark table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfileImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoverImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FollowerCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FollowingCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src=~/images/@item.ProfileImage style="width: 65px; height: 65px; object-fit: cover; object-position: center;">
+                </td>
+                <td>
+                    <img src=~/images/@item.CoverImage style="width: 130px; height: 65px; object-fit: cover; object-position: center; border-radius: 5px;">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FollowerCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FollowingCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    <a asp-controller="User" asp-action="AdminDelete" asp-route-userId="@item.Id" style="color: lightskyblue;">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

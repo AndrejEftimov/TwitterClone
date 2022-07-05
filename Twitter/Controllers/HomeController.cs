@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using Twitter.ViewModels;
 
 namespace Twitter.Controllers
 {
+    [Authorize]
     public class HomeController : BaseController
     {
         public HomeController(TwitterContext context, UserManager<TwitterUser> UserManager) : base(context, UserManager) { }
@@ -22,6 +24,9 @@ namespace Twitter.Controllers
         {
             if (_LoggedInUser == null)
                 return LocalRedirect("/Identity/Account/Login");
+
+            if (userManager.IsInRoleAsync(userManager.GetUserAsync(User).Result, "Admin").Result)
+                return RedirectToAction("AdminIndex", "User");
 
             var usersFollowingIds = _context.Followings.Where(f => f.FollowerId == _LoggedInUser.Id).Select(f => f.FollowedUserId);
 

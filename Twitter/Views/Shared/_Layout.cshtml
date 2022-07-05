@@ -57,9 +57,9 @@
     </div>
 
     <div class="right-header">
-        <form class="search">
+        <form asp-controller="Search" asp-action="Index" class="search" method="post">
             <i class="fas fa-search fa-form-icon"></i>
-            <input placeholder="Search" id="search-input" />
+            <input name="searchString" placeholder="Search" id="search-input" />
         </form>
 
         <div class="recently-followed">
@@ -188,10 +188,10 @@
         }
 
         // search focus
-        $('#search-input').on('focus', function () {
+        $(document).on('focus', "#search-input", function () {
             $(this).parent().addClass('searchOnFocus');
             $(this).siblings().addClass('fa-form-iconOnFocus')
-        }).on('focusout', function () {
+        }).on('focusout', "#search-input", function () {
             $(this).parent().removeClass('searchOnFocus');
             $(this).siblings().removeClass('fa-form-iconOnFocus');
         })

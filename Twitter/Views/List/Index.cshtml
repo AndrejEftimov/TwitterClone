@@ -19,21 +19,52 @@
     </a>
 </div>
 
-<div class="lists-container">
 
-    @foreach (List l in Model.Lists)
-    {
-        <a class="list" asp-controller="List" asp-action="Details" asp-route-listId="@l.Id">
-            <div class="icon-wrapper">
-                <img src="~/images/@l.CoverImage" >
-            </div>
-            <div class="name">
-                @l.Name
-            </div>
-        </a>
-    }
+<!-- lists created -->
+@if (Model.ListsCreated.Count != 0)
+{
+    <div class="lists-container">
 
-</div>
+        <h5>Your Lists</h5>
+
+        @foreach (List l in Model.ListsCreated)
+        {
+            <a class="list" asp-controller="List" asp-action="Details" asp-route-listId="@l.Id">
+                <div class="icon-wrapper">
+                    <img src="~/images/@l.CoverImage">
+                </div>
+                <div class="name">
+                    @l.Name
+                </div>
+            </a>
+        }
+
+    </div>
+
+    <hr />
+}
+
+<!-- lists following -->
+@if (Model.ListsFollowing.Count != 0)
+{
+    <div class="lists-container">
+
+        <h5>Lists Following</h5>
+
+        @foreach (List l in Model.ListsFollowing)
+        {
+            <a class="list" asp-controller="List" asp-action="Details" asp-route-listId="@l.Id">
+                <div class="icon-wrapper">
+                    <img src="~/images/@l.CoverImage">
+                </div>
+                <div class="name">
+                    @l.Name
+                </div>
+            </a>
+        }
+
+    </div>
+}
 
 <div id="modal-create" class="modal-container">
     <div class="content">

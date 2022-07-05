@@ -4,15 +4,15 @@
     }
 
     33% {
-        font-size: 25px;
+        font-size: 18px;
     }
 
     66% {
-        font-size: 19px;
+        font-size: 13px;
     }
 
     100% {
-        font-size: 21px;
+        font-size: 15px;
     }
 }
 
@@ -109,7 +109,26 @@
             .list-container .details .btn-wrapper .button {
                 padding: 1.5% 4% 1.5% 4%;
                 color: white;
+                font-weight: bold;
             }
+
+            .list-container .details .btn-wrapper .anchor-follow {
+                background-color: white;
+                color: rgb(29, 161, 242);
+                border: 1px solid rgb(29, 161, 242);
+            }
+
+                .list-container .details .btn-wrapper .anchor-follow:hover {
+                    background-color: rgba(29, 161, 242, 0.1);
+                }
+
+            .list-container .details .btn-wrapper .anchor-following {
+                color: white;
+            }
+
+                .list-container .details .btn-wrapper .anchor-following:hover {
+                    background-color: rgb(202, 32, 85);
+                }
 
 .post {
     width: 100%;

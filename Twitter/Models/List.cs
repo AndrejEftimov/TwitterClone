@@ -20,6 +20,10 @@ namespace Twitter.Models
         public User? Creator { get; set; }
 
         [Required]
+        [Display(Name = "Date Created")]
+        public DateTime DateCreated { get; set; } = DateTime.Now;
+
+        [Required]
         [StringLength(50, MinimumLength = 1)]
         [Display(Name = "List Name")]
         public string Name { get; set; }

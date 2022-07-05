@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using Twitter.ViewModels;
 
 namespace Twitter.Controllers
 {
+    [Authorize]
     public class ListController : BaseController
     {
         private readonly IWebHostEnvironment webHostEnvironment;
@@ -22,24 +24,27 @@ namespace Twitter.Controllers
             webHostEnvironment = hostEnvironment;
         }
 
-        // GET: List
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Index()
         {
             if (_LoggedInUser == null)
                 return LocalRedirect("/Identity/Account/Login");
 
-            ICollection<List> lists = _context.Lists.Where(l => l.CreatorId == _LoggedInUser.Id).ToList();
+            ICollection<List> listsCreated = _context.Lists.Where(l => l.CreatorId == _LoggedInUser.Id).ToList();
+            _context.Entry(_LoggedInUser).Collection(u => u.ListsFollowing).Query().Include(lf => lf.List).Load();
+            ICollection<List> listsFollowing = _LoggedInUser.ListsFollowing.Select(lf => lf.List).ToList();
 
             ListIndexViewModel viewModel = new ListIndexViewModel
             {
                 LoggedInUser = _LoggedInUser,
-                Lists = lists
+                ListsCreated = listsCreated,
+                ListsFollowing = listsFollowing
             };
 
             return View(viewModel);
         }
 
-        // GET: List/Details/5
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Details(int? listId)
         {
             if (_LoggedInUser == null)
@@ -53,6 +58,7 @@ namespace Twitter.Controllers
             if (list == null)
                 return NotFound();
 
+            _context.Entry(list).Collection(l => l.ListFollowers).Load();
             _context.Entry(list).Collection(l => l.ListMembers).Load();
 
             var memberIds = _context.ListMember.Where(l => l.ListId == listId).Select(l => l.MemberId);
@@ -70,6 +76,7 @@ namespace Twitter.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string? listName, string? listDesc)
@@ -99,30 +106,7 @@ namespace Twitter.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: List/Create
-        public IActionResult AdminCreate()
-        {
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "DisplayName");
-            return View();
-        }
-
-        // POST: List/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AdminCreate([Bind("Id,CreatorId,Name")] List list)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(list);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "DisplayName", list.CreatorId);
-            return View(list);
-        }
-
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int? listId)
         {
             if (_LoggedInUser == null)
@@ -151,6 +135,7 @@ namespace Twitter.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ListEditViewModel viewModel)
@@ -202,70 +187,112 @@ namespace Twitter.Controllers
             return View(viewModel);
         }
 
-        // GET: List/Edit/5
-        public async Task<IActionResult> AdminEdit(int? id)
-        {
-            if (id == null || _context.Lists == null)
-            {
-                return NotFound();
-            }
-
-            var list = await _context.Lists.FindAsync(id);
-            if (list == null)
-            {
-                return NotFound();
-            }
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "DisplayName", list.CreatorId);
-            return View(list);
-        }
-
-        // POST: List/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "User")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AdminEdit(int id, [Bind("Id,CreatorId,Name")] List list)
+        // doesn't work with this DataAnnotation
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Follow(int? listId)
         {
-            if (id != list.Id)
+            if (listId == null)
+                return Ok();
+
+            List list = _context.Lists.FirstOrDefault(l => l.Id == listId);
+            if (list == null)
+                return Ok();
+
+            ListFollower listFollower = _context.ListFollower.FirstOrDefault(lf => lf.ListId == list.Id && lf.FollowerId == _LoggedInUser.Id);
+            if (listFollower == null)
             {
-                return NotFound();
+                list.FollowerCount++;
+
+                listFollower = new ListFollower
+                {
+                    ListId = list.Id,
+                    FollowerId = _LoggedInUser.Id,
+                };
+
+                _context.ListFollower.Add(listFollower);
+                await _context.SaveChangesAsync();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(list);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ListExists(list.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "DisplayName", list.CreatorId);
-            return View(list);
+            return Ok();
         }
 
-        // GET: List/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        // doesn't work with this DataAnnotation
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Unfollow(int? listId)
         {
-            if (id == null || _context.Lists == null)
+            if (listId == null)
+                return Ok();
+
+            List list = _context.Lists.FirstOrDefault(l => l.Id == listId);
+            if (list == null)
+                return Ok();
+
+            ListFollower listFollower = _context.ListFollower.FirstOrDefault(lf => lf.ListId == list.Id && lf.FollowerId == _LoggedInUser.Id);
+            if (listFollower != null)
+            {
+                list.FollowerCount--;
+
+                _context.ListFollower.Remove(listFollower);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminIndex()
+        {
+            return View(_context.Lists.Include(l => l.Creator).OrderByDescending(l => l.DateCreated).ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> AdminIndex(int? listId, int? creatorId, string? creatorName, string? listName, string? listDesc)
+        {
+            var lists = _context.Lists.AsQueryable();
+
+            if(listId != null)
+                lists = lists.Where(l => l.Id == listId);
+
+            if(creatorId != null)
+                lists = lists.Where(l => l.CreatorId == creatorId);
+
+            if(creatorName != null)
+            {
+                creatorName = creatorName.ToUpper();
+                lists = lists.Where(l => l.Creator.UserName.ToUpper().Contains(creatorName) || l.Creator.DisplayName.ToUpper().Contains(creatorName));
+            }
+
+            if(listName != null)
+            {
+                listName = listName.ToUpper();
+                lists = lists.Where(l => l.Name.ToUpper().Contains(listName));
+            }
+
+            if(listDesc != null)
+            {
+                listDesc = listDesc.ToUpper();
+                lists = lists.Where(l => l.Description.ToUpper().Contains(listDesc));
+            }
+
+            lists = lists.Include(l => l.Creator).OrderByDescending(l => l.DateCreated);
+
+            return View(lists.ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminDelete(int? id)
+        {
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var list = await _context.Lists
-                .Include(l => l.Creator)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            List list = await _context.Lists.Include(l => l.Creator).FirstOrDefaultAsync(l => l.Id == id);
             if (list == null)
             {
                 return NotFound();
@@ -274,23 +301,19 @@ namespace Twitter.Controllers
             return View(list);
         }
 
-        // POST: List/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost, ActionName("AdminDelete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> AdminDeleteConfirmed(int id)
         {
-            if (_context.Lists == null)
-            {
-                return Problem("Entity set 'TwitterContext.Lists'  is null.");
-            }
-            var list = await _context.Lists.FindAsync(id);
+            List list = await _context.Lists.FindAsync(id);
             if (list != null)
             {
                 _context.Lists.Remove(list);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("AdminIndex");
         }
 
         private bool ListExists(int id)

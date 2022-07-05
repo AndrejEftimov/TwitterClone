@@ -84,3 +84,8 @@ a {
 .show-white-space {
     white-space: pre-wrap;
 }
+
+hr {
+    color: rgba(230, 236, 240, 1) !important;
+    opacity: 1 !important;
+}

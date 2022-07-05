@@ -2,7 +2,23 @@
 
 @{
     ViewData["Title"] = "List Details";
+    
+    bool sameUser = false;
     bool isHearted;
+    bool isFollowing = false;
+
+    if (Model.LoggedInUser.Id == Model.List.CreatorId)
+    {
+        sameUser = true;
+    }
+
+    else // if(Model.LoggedInUser.Id != Model.List.CreatorId)
+    {
+        if (Model.List.ListFollowers.Select(f => f.FollowerId).Contains(Model.LoggedInUser.Id))
+        {
+            isFollowing = true;
+        }
+    }
 }
 
 <link rel="stylesheet" href="~/css/ListDetails.css" />
@@ -30,24 +46,27 @@
         <div class="members">
             <span class="member-count">@Model.List.MemberCount</span>&nbsp;Members
             &ensp;&ensp;
-            <span class="member-count">@Model.List.FollowerCount</span>&nbsp;Followers
+            <span class="member-count follower-count" data-follower-count="@Model.List.FollowerCount">@Model.List.FollowerCount</span>&nbsp;Followers
         </div>
         <div class="btn-wrapper">
-            <a asp-controller="List" asp-action="Edit" asp-route-listId="@Model.List.Id" class="button">Edit List</a>
+            <a class="button follow-list-btn @(isFollowing ? "anchor-following" : "anchor-follow")" hidden="@sameUser" data-listid="@Model.List.Id">
+                @(isFollowing ? "Following" : "Follow")
+            </a>
+            <a class="button" asp-controller="List" asp-action="Edit" asp-route-listId="@Model.List.Id" hidden="@(!sameUser)">Edit List</a>
         </div>
     </div>
 </div>
 
 @foreach (Post p in Model.Posts)
 {
-    if(p.Hearts.Select(h => h.UserId).Contains(Model.LoggedInUser.Id))
-        {
-            isHearted = true;
-        }
-        else
-        {
-            isHearted = false;
-        }
+    if (p.Hearts.Select(h => h.UserId).Contains(Model.LoggedInUser.Id))
+    {
+        isHearted = true;
+    }
+    else
+    {
+        isHearted = false;
+    }
 
     <div class="post">
         <a class="overlay" asp-controller="Post" asp-action="Index" asp-route-postId="@p.Id"></a>
@@ -95,5 +114,6 @@
 }
 
 @section Scripts{
-    <script src="~/js/Hearting.js" asp-append-version="true"></script>
+<script src="~/js/Hearting.js" asp-append-version="true"></script>
+<script src="~/js/FollowingList.js" asp-append-version="true"></script>
 }

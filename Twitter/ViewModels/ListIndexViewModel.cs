@@ -4,6 +4,8 @@ namespace Twitter.ViewModels
 {
     public class ListIndexViewModel : BaseViewModel
     {
-        public ICollection<List>? Lists { get; set; }
+        public ICollection<List>? ListsCreated { get; set; }
+
+        public ICollection<List>? ListsFollowing { get; set; }
     }
 }

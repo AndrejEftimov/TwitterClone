@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Reply>
+
+@{
+    ViewData["Title"] = "AdminReplies";
+    Layout = "_AdminLayout";
+}
+<div style="display: flex; justify-content:space-evenly; align-items: center; padding: 1%; background-color: rgb(33, 37, 41);">
+
+    <h1 style="color: rgb(13, 110, 253); font-size: 45px;">
+        <i class="fa-solid fa-object-group"></i>
+        Posts
+    </h1>
+
+    <form asp-controller="Post" asp-action="AdminReplies" method="post">
+        <div class="row">
+            <input name="postId" value="@(Model.Count() != 0 ? Model.First().PostId : "")" hidden="true"/>
+            <div class="form-floating col">
+                <input name="replyId" type="number" class="form-control" />
+                <label class="form-label">&nbsp; Reply Id</label>
+            </div>
+            <div class="form-floating col">
+                <input name="userId" type="number" class="form-control" />
+                <label class="form-label">&nbsp; User Id</label>
+            </div>
+            <div class="form-floating col">
+                <input name="userName" type="text" class="form-control" />
+                <label class="form-label">&nbsp; User Name</label>
+            </div>
+            <div class="form-floating col">
+                <input name="replyText" type="text" class="form-control" />
+                <label class="form-label">&nbsp; Reply Text</label>
+            </div>
+            <div class="form-floating col">
+                <button type="submit" class="w-100 btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<table class="table table-dark table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PostId)
+            </th>
+            <th>
+                ReplyId
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User.ProfileImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User.UserName)
+            </th>
+            <th>
+                User Id
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeartCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    <img src="~/images/@item.User.ProfileImage" style="width: 65px; height: 65px; object-fit: cover; object-position: center;">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HeartCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    <a asp-controller="Post" asp-action="AdminDeleteReply" asp-route-id="@item.Id" style="color: lightskyblue;">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Post>
+
+@{
+    ViewData["Title"] = "AdminIndex";
+    Layout = "_AdminLayout";
+}
+<div style="display: flex; justify-content:space-evenly; align-items: center; padding: 1%; background-color: rgb(33, 37, 41);">
+
+    <h1 style="color: rgb(13, 110, 253); font-size: 45px;">
+        <i class="fa-solid fa-object-group"></i>
+        Posts
+    </h1>
+
+    <form asp-controller="Post" asp-action="AdminIndex" method="post">
+        <div class="row">
+            <div class="form-floating col">
+                <input name="postId" type="number" class="form-control" />
+                <label class="form-label">&nbsp; Post Id</label>
+            </div>
+            <div class="form-floating col">
+                <input name="userId" type="number" class="form-control" />
+                <label class="form-label">&nbsp; User Id</label>
+            </div>
+            <div class="form-floating col">
+                <input name="userName" type="text" class="form-control" />
+                <label class="form-label">&nbsp; User Name</label>
+            </div>
+            <div class="form-floating col">
+                <input name="postText" type="text" class="form-control" />
+                <label class="form-label">&nbsp; Post Text</label>
+            </div>
+            <div class="form-floating col">
+                <button type="submit" class="w-100 btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<table class="table table-dark table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.User.ProfileImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeartCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReplyCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/images/@item.User.ProfileImage" style="width: 65px; height: 65px; object-fit: cover; object-position: center;">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Image))
+                    {
+                        <img src="~/images/@item.Image" style="width: 65px; height: 65px; object-fit: cover; object-position: center; border-radius: 5px;">
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HeartCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReplyCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    <a asp-controller="Post" asp-action="AdminReplies" asp-route-postId="@item.Id" style="color: lightskyblue;">Replies</a> |
+                    <a asp-controller="Post" asp-action="AdminDelete" asp-route-id="@item.Id" style="color: lightskyblue;">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -156,48 +156,48 @@ nav {
     background-color: white;
 }
 
-.search {
-    width: 46%;
-    height: 4.5%;
-    background-color: rgb(230, 236, 240);
-    border-radius: 9999px;
-    border: none;
-    outline: none;
-    padding-left: 3%;
-    padding-right: 3%;
-    margin-left: 4.5%;
-    margin-top: 1%;
-    color: rgb(101, 119, 134);
-    font-size: 16px;
-}
-
-.searchOnFocus { /*applied using javascript (jquery)*/
-    background-color: white;
-    border: 1px solid rgb(29, 161, 242);
-    padding-left: calc(3% - 1px);
-}
-
-.fa-form-icon {
-    margin-right: 4%;
-}
-
-.fa-form-iconOnFocus { /*applied using javascript (jquery)*/
-    color: rgb(29, 161, 242);
-}
-
-#search-input {
-    height: 100%;
-    width: 85%;
-    display: inline;
-    border: none;
-    background-color: inherit;
-    color: inherit;
-    outline: none;
-}
-
-    #search-input:focus {
-        color: black;
+    .right-header .search {
+        width: 46%;
+        height: 4.5%;
+        background-color: rgb(230, 236, 240);
+        border-radius: 9999px;
+        border: none;
+        outline: none;
+        padding-left: 3%;
+        padding-right: 3%;
+        margin-left: 4.5%;
+        margin-top: 1%;
+        color: rgb(101, 119, 134);
+        font-size: 16px;
     }
+
+    .right-header .searchOnFocus { /*applied using javascript (jquery)*/
+        background-color: white;
+        border: 1px solid rgb(29, 161, 242);
+        padding-left: calc(3% - 1px);
+    }
+
+    .right-header .fa-form-icon {
+        margin-right: 4%;
+    }
+
+    .right-header .fa-form-iconOnFocus { /*applied using javascript (jquery)*/
+        color: rgb(29, 161, 242);
+    }
+
+    .right-header #search-input {
+        height: 100%;
+        width: 85%;
+        display: inline;
+        border: none;
+        background-color: inherit;
+        color: inherit;
+        outline: none;
+    }
+
+        .right-header #search-input:focus {
+            color: black;
+        }
 
 .recently-followed {
     width: 46%;

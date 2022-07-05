@@ -2,18 +2,24 @@
 
 @{
     ViewData["Title"] = "Profile";
+    ViewData["nav"] = "";
 
     bool sameUser = false;
     bool isHearted;
+    bool isFollowing = false;
 
     if (Model.LoggedInUser.Id == Model.User.Id)
     {
         ViewData["nav"] = "Profile";
         sameUser = true;
     }
-    else
+
+    else // if(Model.LoggedInUser.Id != Model.User.Id)
     {
-        ViewData["nav"] = "";
+        if (Model.User.Followers.Select(f => f.FollowerId).Contains(Model.LoggedInUser.Id))
+        {
+            isFollowing = true;
+        }
     }
 }
 
@@ -35,14 +41,8 @@
                 <img src="~/images/@Model.User.ProfileImage" />
             </div>
             <div class="actions">
-                <a class="button @if(!sameUser){
-                @((bool) ViewData["isFollowing"] == true ? "anchor-following" : "anchor-follow")
-}"
-                   hidden="@sameUser">
-                    @if (!sameUser)
-                    {
-                        @((bool) ViewData["isFollowing"] == true ? "Following" : "Follow")
-                    }
+                <a class="button follow-user-btn @(isFollowing ? "anchor-following" : "anchor-follow")" hidden="@sameUser" data-userid="@Model.User.Id">
+                    @(isFollowing ? "Following" : "Follow")
                 </a>
                 <a class="button edit-profile" hidden="@(!sameUser)" asp-controller="User" asp-action="Edit" asp-route-userId="@Model.User.Id">
                     Edit Profile
@@ -70,7 +70,7 @@
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <div class="followers">
-                <span class="follow-count">@Model.User.FollowerCount</span> Followers
+                <span class="follow-count" data-follower-count="@Model.User.FollowerCount">@Model.User.FollowerCount</span> Followers
             </div>
         </div>
     </div>
@@ -134,22 +134,9 @@
 
 @section Scripts{
 <script src="~/js/Hearting.js" asp-append-version="true"></script>
+<script src="~/js/FollowingUser.js" asp-append-version="true"></script>
 
 <script>
-    // follow/unfollow
-    var actions = document.getElementsByClassName('profile-container')[0].getElementsByClassName('actions')[0];
-    var btn = actions.getElementsByClassName('button')[0];
-
-    if (btn.innerHTML == "Following") {
-        btn.onmouseover = function () {
-            btn.innerHTML = "Unfollow";
-        }
-
-        btn.onmouseout = function () {
-            btn.innerHTML = "Following";
-        }
-    }
-
     // modal-edit
       /*var edit_btn = document.getElementsByClassName('edit-profile')[0];
         var edit_modal = document.getElementById('modal-edit');
